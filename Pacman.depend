@@ -1,0 +1,94 @@
+# depslib dependency file v1.0
+1540602624 source:c:\users\bilni\onedrive\documents\td_info\pacman 2\plateau.c
+
+1541701381 source:c:\users\bilni\onedrive\documents\td_info\pacman 2\utils.c
+	"utils.h"
+
+1541701381 c:\users\bilni\onedrive\documents\td_info\pacman 2\utils.h
+	"windows.h"
+
+1541701478 source:c:\users\bilni\onedrive\documents\td_info\pacman 2\jeu.c
+	"Jeu.h"
+	"Tableaux.h"
+
+1541701362 c:\users\bilni\onedrive\documents\td_info\pacman 2\jeu.h
+	"Parametres.h"
+	"Constantes.h"
+
+1541026798 c:\users\bilni\onedrive\documents\td_info\pacman 2\base.h
+	"Parametres.h"
+	"Constantes.h"
+	"Jeu.h"
+	"utils.h"
+
+1541101937 c:\users\bilni\onedrive\documents\td_info\pacman 2\parametres.h
+	<stdio.h>
+
+1541701459 c:\users\bilni\onedrive\documents\td_info\pacman 2\constantes.h
+
+1541718199 source:c:\users\bilni\onedrive\documents\td_info\pacman 2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	"windows.h"
+	"time.h"
+	"Jeu.h"
+	"Parametres.h"
+	"Constantes.h"
+	"utils.h"
+
+1540826618 source:c:\users\bilni\onedrive\documents\td_info\pacman 2\parametres.c
+	"Parametres.h"
+
+1541854420 c:\users\bilni\onedrive\documents\td_info\pacman 2\tableaux.h
+	"Entite.h"
+	"Parametres.h"
+	"Constantes.h"
+	"utils.h"
+
+1541793575 source:c:\users\bilni\onedrive\documents\td_info\pacman 2\tableaux.c
+	"Tableaux.h"
+
+1541684369 c:\users\bilni\onedrive\documents\td_info\pacman 2\entite.h
+
+1541859949 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\jeu.c
+	"Jeu.h"
+	"Tableaux.h"
+
+1541701362 c:\users\bilni\onedrive\documents\td_info\projets\pacman\jeu.h
+	"Parametres.h"
+	"Constantes.h"
+
+1541101937 c:\users\bilni\onedrive\documents\td_info\projets\pacman\parametres.h
+	<stdio.h>
+
+1541701459 c:\users\bilni\onedrive\documents\td_info\projets\pacman\constantes.h
+
+1541873247 c:\users\bilni\onedrive\documents\td_info\projets\pacman\tableaux.h
+	"Entite.h"
+	"Parametres.h"
+	"Constantes.h"
+	"utils.h"
+
+1541684369 c:\users\bilni\onedrive\documents\td_info\projets\pacman\entite.h
+
+1541701381 c:\users\bilni\onedrive\documents\td_info\projets\pacman\utils.h
+	"windows.h"
+
+1541718199 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\main.c
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	"windows.h"
+	"time.h"
+	"Jeu.h"
+	"Parametres.h"
+	"Constantes.h"
+	"utils.h"
+
+1540826618 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\parametres.c
+	"Parametres.h"
+
+1541701381 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\utils.c
+	"utils.h"
+
