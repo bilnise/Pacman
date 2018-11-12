@@ -701,7 +701,7 @@ int tableau3(Parametres _params, int _score[NB_TAB])
                                 "                                                  ",
                                 "                                                  "
                                };
-    int nbDiamants, i, fin, gagne;
+    int nbDiamants, i, fin, gagne, compteurBoucle;
     t_diamant diamants[5];
     t_pacman pacman;
     t_ghost fantomes[4];
@@ -712,9 +712,10 @@ int tableau3(Parametres _params, int _score[NB_TAB])
     nbDiamants = 5;
     fin = 0;
     gagne = 0;
+    compteurBoucle = 0;
 
     ///     1.1. Initialiser pacman
-    initialiserPacman(&pacman,_params.vitesseInitale, plateau);
+    initialiserPacman(&pacman,1, plateau);
 
     ///     1.2. Initialiser les diamants
     for(i=0;i<5;i++)
@@ -763,15 +764,17 @@ int tableau3(Parametres _params, int _score[NB_TAB])
             break;
         }
 
-        ///     3.1. Mise à jour
+        ///     3.1. Mise à jour Ghosts
         for(i=0;i<4;i++)
             updateGhost(&fantomes[i],plateau,_params.bordure);
 
-        ///     3.2. Mise à jour position Pacman selon la direction
-        updatePacman(&pacman,plateau,_params.bordure);
+        ///     3.2. Mise à jour Pacman
+        if(compteurBoucle%pacman.vitesse == 0)
+            updatePacman(&pacman,plateau,_params.bordure);
+
+        ///     3.3. Traquer Pacman (pathfinding A*)
 
         ///     3.3. Tester collision bordure (Pacman)
-        ///         3.3.1. Si bordure activé, décrémenter nombre de vie de 1 et faire rebondir Pacman
         testBordurePacman(&pacman,_params.bordure);
 
         ///     3.4. Tester collision bordure (fantômes)
@@ -786,13 +789,15 @@ int tableau3(Parametres _params, int _score[NB_TAB])
         for(i=0;i<5;i++)
             testPacmanDiamant(pacman,&diamants[i],plateau,&_score[2],&nbDiamants);
 
+        ///     3.7. Tester collision Pacman et murs
         testPacmanMur(&pacman,plateau);
 
+        ///     3.8. Tester collision Ghosts et murs
         for(i=0;i<4;i++)
             testGhostMur(&fantomes[i],plateau);
 
-        ///     3.7. Tester nombre de vie
-        ///         3.7.1. Si nombre de vie nul, afficher "Game over" et retourner 0
+        ///     3.9. Tester nombre de vie
+        ///         3.9.1. Si nombre de vie nul, afficher "Game over" et retourner 0
         if(pacman.vies == 0)
         {
             gotoligcol(LIG/2, COL/2-5);
@@ -801,8 +806,8 @@ int tableau3(Parametres _params, int _score[NB_TAB])
             gagne=0;
         }
 
-        ///     3.8. Tester nombre de diamants restants
-        ///         3.8.1. Si nombre de diamants restants nul, afficher "Gagné !" et retourner 1
+        ///     3.10. Tester nombre de diamants restants
+        ///         3.10.1. Si nombre de diamants restants nul, afficher "Gagné !" et retourner 1
         if(nbDiamants == 0)
         {
             gotoligcol(LIG/2, COL/2-3);
@@ -811,7 +816,7 @@ int tableau3(Parametres _params, int _score[NB_TAB])
             gagne=1;
         }
 
-        ///     3.9. Appuie d'une touche utilisateur
+        ///     3.11. Appuie d'une touche utilisateur
         if(kbhit())
         {
             char touche;
@@ -820,7 +825,7 @@ int tableau3(Parametres _params, int _score[NB_TAB])
 
             switch(touche)
             {
-            ///         3.9.1. Selon la touche, modifier la direction du pacman
+            ///         3.11.1. Selon la touche, modifier la direction du pacman
 
             case '8':
                 pacman.dirX = 0;
@@ -842,7 +847,7 @@ int tableau3(Parametres _params, int _score[NB_TAB])
                 pacman.dirY = 0;
                 break;
 
-            ///         3.9.2. Mise en pause
+            ///         3.11.2. Mise en pause
             case 'p':
                 pause = 1;
                 while(pause)
@@ -852,39 +857,41 @@ int tableau3(Parametres _params, int _score[NB_TAB])
                 }
                 break;
 
-            ///         3.9.3. Quitter
+            ///         3.11.3. Quitter
             case 'q':
                 fin = 1;
                 break;
             }
         }
 
-        ///     3.10. Afficher éléments
-        ///         3.10.1. Afficher diamants
+        ///     3.12. Afficher éléments
+        ///         3.12.1. Afficher diamants
         for(i=0; i<5; i++)
         {
             plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
             affiche(plateau, diamants[i].posX, diamants[i].posY, _params.bordure);
         }
 
-        ///         3.10.2. Afficher Pacman
+        ///         3.12.2. Afficher Pacman
         plateau[pacman.posY][pacman.posX] = pacman.forme;
         affiche(plateau, pacman.posX, pacman.posY, _params.bordure);
 
-        ///         3.10.3. Afficher fantômes
+        ///         3.12.3. Afficher fantômes
         for(i=0; i<4; i++)
         {
             plateau[fantomes[i].posY][fantomes[i].posX]=fantomes[i].forme;
             affiche(plateau, fantomes[i].posX, fantomes[i].posY, _params.bordure);
         }
 
-        ///         3.10.4. Afficher score
+        ///         3.12.4. Afficher score
         gotoligcol(LIG+3,8);
         printf("%d",_score[0]+_score[1]+_score[2]);
 
-        ///         3.10.5. Afficher vies
+        ///         3.12.5. Afficher vies
         gotoligcol(LIG+4,7);
         printf("%d",pacman.vies);
+
+        compteurBoucle++;
     }
 
     Sleep(2000);
