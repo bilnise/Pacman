@@ -51,31 +51,35 @@
 
 1541684369 c:\users\bilni\onedrive\documents\td_info\pacman 2\entite.h
 
-1541859949 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\jeu.c
+1541874417 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\jeu.c
 	"Jeu.h"
 	"Tableaux.h"
 
-1541701362 c:\users\bilni\onedrive\documents\td_info\projets\pacman\jeu.h
+1541874417 c:\users\bilni\onedrive\documents\td_info\projets\pacman\jeu.h
 	"Parametres.h"
 	"Constantes.h"
 
-1541101937 c:\users\bilni\onedrive\documents\td_info\projets\pacman\parametres.h
+1541874417 c:\users\bilni\onedrive\documents\td_info\projets\pacman\parametres.h
 	<stdio.h>
 
-1541701459 c:\users\bilni\onedrive\documents\td_info\projets\pacman\constantes.h
+1541874417 c:\users\bilni\onedrive\documents\td_info\projets\pacman\constantes.h
 
-1541873247 c:\users\bilni\onedrive\documents\td_info\projets\pacman\tableaux.h
+1541983753 c:\users\bilni\onedrive\documents\td_info\projets\pacman\tableaux.h
+	"windows.h"
+	"time.h"
+	"conio.h"
 	"Entite.h"
 	"Parametres.h"
 	"Constantes.h"
 	"utils.h"
+	"Jeu.h"
 
-1541684369 c:\users\bilni\onedrive\documents\td_info\projets\pacman\entite.h
+1541874417 c:\users\bilni\onedrive\documents\td_info\projets\pacman\entite.h
 
-1541701381 c:\users\bilni\onedrive\documents\td_info\projets\pacman\utils.h
+1541982480 c:\users\bilni\onedrive\documents\td_info\projets\pacman\utils.h
 	"windows.h"
 
-1541718199 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\main.c
+1541971126 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<conio.h>
@@ -86,9 +90,12 @@
 	"Constantes.h"
 	"utils.h"
 
-1540826618 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\parametres.c
+1541874417 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\parametres.c
 	"Parametres.h"
 
-1541701381 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\utils.c
+1541982454 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\utils.c
 	"utils.h"
+
+1541983239 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\tableaux.c
+	"Tableaux.h"
 
