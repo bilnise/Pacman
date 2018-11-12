@@ -3,7 +3,7 @@
 void initialiserPacman(t_pacman *_pacman, int _vitesseInitiale, char _plateau[LIG][COL])
 {
     _pacman->forme = 'X';
-    _pacman->vies = 5;
+    _pacman->vies = VIES;
     _pacman->vitesse = _vitesseInitiale;
     _pacman->dirX = -1+rand()%3;
 
