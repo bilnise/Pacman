@@ -278,21 +278,16 @@ int testPacmanGhost(t_pacman *_pacman, t_ghost _ghost)
     return 0;
 }
 
-int testPacmanDiamants(t_pacman _pacman, t_diamant _diamants[4], char _plateau[LIG][COL], int *_score, int *_nbDiamants)
+int testPacmanDiamant(t_pacman _pacman, t_diamant *_diamant, char _plateau[LIG][COL], int *_score, int *_nbDiamants)
 {
-    int i;
-    if(_plateau[_pacman.posY][_pacman.posX] == 'D')
+    if(_pacman.posX == _diamant->posX && _pacman.posY == _diamant->posY && _plateau[_pacman.posY][_pacman.posX] == 'D')
     {
         ///         3.3.1. Augmenter score de 10
         *_score += 10;
         ///         3.3.2. Décrémenter nombre de diamants restants de 1
         (*_nbDiamants)--;
         ///         3.3.3. Mettre à jour diamant
-        for(i=0; i<5; i++)
-        {
-            if(_diamants[i].posX == _pacman.posX && _diamants[i].posY == _pacman.posY)
-                _diamants[i].forme = ' ';
-        }
+        _diamant->forme = ' ';
 
         return 1;
     }
@@ -415,7 +410,9 @@ int tableau1(Parametres _params, int _score[NB_TAB])
             fin = 1;
         }
         ///     3.3. Tester collision diamant
-        testPacmanDiamants(pacman,diamants,plateau,&_score[0],&nbDiamants);
+        for(i=0;i<5;i++)
+            testPacmanDiamant(pacman,&diamants[i],plateau,&_score[0],&nbDiamants);
+
         ///     3.6. Appuie d'une touche utilisateur
         if(kbhit())
         {
@@ -577,7 +574,8 @@ int tableau2(Parametres _params, int _score[NB_TAB])
             testPacmanGhost(&pacman,fantomes[i]);
 
         ///     3.6. Tester collision diamant
-        testPacmanDiamants(pacman,diamants,plateau,&_score[1],&nbDiamants);
+        for(i=0;i<5;i++)
+            testPacmanDiamant(pacman,&diamants[i],plateau,&_score[1],&nbDiamants);
 
         ///     3.7. Tester nombre de vie
         ///         3.7.1. Si nombre de vie nul, afficher "Game over" et retourner 0
@@ -785,7 +783,8 @@ int tableau3(Parametres _params, int _score[NB_TAB])
             testPacmanGhost(&pacman,fantomes[i]);
 
         ///     3.6. Tester collision diamant
-        testPacmanDiamants(pacman,diamants,plateau,&_score[2],&nbDiamants);
+        for(i=0;i<5;i++)
+            testPacmanDiamant(pacman,&diamants[i],plateau,&_score[2],&nbDiamants);
 
         testPacmanMur(&pacman,plateau);
 

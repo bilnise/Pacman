@@ -29,7 +29,7 @@ void updateGhost(t_ghost *_ghost, char _plateau[LIG][COL], int _bordure);
 int testBordurePacman(t_pacman * _pacman, int _bordure);
 int testBordureGhost(t_ghost *_ghost, int _bordure);
 int testPacmanGhost(t_pacman *pacman, t_ghost _ghost);
-int testPacmanDiamants(t_pacman _pacman, t_diamant _diamants[4], char _plateau[LIG][COL], int *_score, int *_nbDiamants);
+int testPacmanDiamant(t_pacman _pacman, t_diamant *_diamant, char _plateau[LIG][COL], int *_score, int *_nbDiamants);
 int testPacmanMur(t_pacman *_pacman, char _plateau[LIG][COL]);
 int testGhostMur(t_ghost *_ghost, char _plateau[LIG][COL]);
 
