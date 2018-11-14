@@ -707,6 +707,7 @@ int tableau3(Parametres _params, int _score[NB_TAB])
                                 "                                                  "
                                };
     int nbDiamants, i, fin, gagne, compteurBoucle;
+    int vitesseFantomes[4];
     t_diamant diamants[5];
     t_pacman pacman;
     t_ghost fantomes[4];
@@ -719,8 +720,13 @@ int tableau3(Parametres _params, int _score[NB_TAB])
     gagne = 0;
     compteurBoucle = 0;
 
+    vitesseFantomes[0] = 4;
+    vitesseFantomes[1] = 4;
+    vitesseFantomes[2] = 1;
+    vitesseFantomes[3] = 1;
+
     ///     1.1. Initialiser pacman
-    initialiserPacman(&pacman,1, plateau);
+    initialiserPacman(&pacman,6, plateau);
 
     ///     1.2. Initialiser les diamants
     for(i=0;i<5;i++)
@@ -728,7 +734,7 @@ int tableau3(Parametres _params, int _score[NB_TAB])
 
     ///     1.3. Initialiser fantômes
     for(i=0;i<4;i++)
-        initialiserGhost(&fantomes[i],_params.vitesseInitale, plateau);
+        initialiserGhost(&fantomes[i],vitesseFantomes[i], plateau);
 
     ///     1.4. Initialiser plateau
     plateau[pacman.posY][pacman.posX] = pacman.forme;
@@ -771,7 +777,11 @@ int tableau3(Parametres _params, int _score[NB_TAB])
 
         ///     3.1. Mise à jour Ghosts
         for(i=0;i<4;i++){
-            updateGhost(&fantomes[i],plateau,_params.bordure);
+            if(compteurBoucle%fantomes[i].vitesse == 0)
+            {
+                updateGhost(&fantomes[i],plateau,_params.bordure);
+            }
+
             deplacerGhost(&fantomes[i]);
         }
 
@@ -794,7 +804,12 @@ int tableau3(Parametres _params, int _score[NB_TAB])
 
         ///     3.6. Tester collision diamant
         for(i=0;i<5;i++)
-            testPacmanDiamant(pacman,&diamants[i],plateau,&_score[2],&nbDiamants);
+        {
+            if(testPacmanDiamant(pacman,&diamants[i],plateau,&_score[2],&nbDiamants))
+            {
+                pacman.vitesse--;
+            }
+        }
 
         ///     3.7. Tester collision Pacman et murs
         testPacmanMur(&pacman,plateau);
