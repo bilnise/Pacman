@@ -26,6 +26,8 @@ void afficherPlateau(char _plateau[LIG][COL], int _bordure);
 void updatePacman(t_pacman *_pacman, char _plateau[LIG][COL], int _bordure);
 void updateGhost(t_ghost *_ghost, char _plateau[LIG][COL], int _bordure);
 
+void deplacerGhost(t_ghost *_ghost);
+
 int testBordurePacman(t_pacman * _pacman, int _bordure);
 int testBordureGhost(t_ghost *_ghost, int _bordure);
 int testPacmanGhost(t_pacman *pacman, t_ghost _ghost);

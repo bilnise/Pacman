@@ -124,7 +124,10 @@ void updateGhost(t_ghost *_ghost, char _plateau[LIG][COL], int _bordure)
 
     _ghost->posX += _ghost->dirX;
     _ghost->posY += _ghost->dirY;
+}
 
+void deplacerGhost(t_ghost *_ghost)
+{
     if(rand()%5 == 1) // Permet des mouvements moins "aléatoires"
     {
         _ghost->dirX=(rand()%3)-1;
@@ -555,8 +558,10 @@ int tableau2(Parametres _params, int _score[NB_TAB])
         }
 
         ///     3.1. Mise à jour fantômes
-        for(i=0;i<4;i++)
+        for(i=0;i<4;i++){
             updateGhost(&fantomes[i],plateau,_params.bordure);
+            deplacerGhost(&fantomes[i]);
+        }
 
         ///     3.2. Mise à jour position Pacman selon la direction
         updatePacman(&pacman,plateau,_params.bordure);
@@ -765,8 +770,10 @@ int tableau3(Parametres _params, int _score[NB_TAB])
         }
 
         ///     3.1. Mise à jour Ghosts
-        for(i=0;i<4;i++)
+        for(i=0;i<4;i++){
             updateGhost(&fantomes[i],plateau,_params.bordure);
+            deplacerGhost(&fantomes[i]);
+        }
 
         ///     3.2. Mise à jour Pacman
         if(compteurBoucle%pacman.vitesse == 0)
