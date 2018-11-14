@@ -54,13 +54,6 @@ int main()
     /// 5. Lancer menu
     menu(&params, scores, &tableauCourant);
 
-    /// 6. Sauvegarder
-    if(!enregistrerSauvegarde(tableauCourant, scores))
-        printf("Impossible de sauvegarder");
-    else
-        printf("Sauvegarde reussi !");
-    Sleep(1000);
-
     return 0;
 }
 
@@ -204,6 +197,9 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
 {
     char touche;
     int i;
+    int save;
+
+    save=1;
 
     while(1)
     {
@@ -218,6 +214,18 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
         printf("                5. Reprendre\n");
         printf("                6. Afficher les scores\n");
         printf("                7. Quitter\n");
+
+        /// Enregistrer dès que l'on revient au menu après avoir lancer une partie
+        if(!save)
+        {
+            if(!enregistrerSauvegarde(*_tableauCourant, _scores))
+                printf("Impossible de sauvegarder");
+            else
+            {
+                printf("Sauvegarde reussi !");
+                save = 1; // Sauvegarde réalisée
+            }
+        }
 
         /// 3.2. Attente du choix de l'utilisateur
         touche = getch();
@@ -250,11 +258,13 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
             }
 
             jeu(*_params, _scores,_tableauCourant);
+            save = 0;
             break;
 
         case '(':
         case '5':
             jeu(*_params,_scores,_tableauCourant);
+            save = 0;
             break;
 
         case '-':
@@ -266,6 +276,7 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
         case '7':
             return;
         }
+
     }
 
 }
