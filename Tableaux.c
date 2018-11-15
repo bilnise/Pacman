@@ -38,7 +38,7 @@ void initialiserDiamant(t_diamant *_diamant, char _plateau[LIG][COL])
         _diamant->posX = rand()%COL;
         _diamant->posY = rand()%LIG;
 
-        ///         1.2.1. Vérifier les superpositions
+        ///         1.2.1. VÃ©rifier les superpositions
     }
     while(_plateau[_diamant->posY][_diamant->posX] != ' ');
 }
@@ -58,7 +58,7 @@ void initialiserGhost(t_ghost *_ghost, int _vitesse, char _plateau[LIG][COL])
         _ghost->posX = rand()%COL;
         _ghost->posY = rand()%LIG;
 
-        ///         1.3.1. Vérifier les superpositions
+        ///         1.3.1. VÃ©rifier les superpositions
     }
     while(_plateau[_ghost->posY][_ghost->posX] != ' ');
 
@@ -67,28 +67,34 @@ void initialiserGhost(t_ghost *_ghost, int _vitesse, char _plateau[LIG][COL])
 void afficherPlateau(char _plateau[LIG][COL], int _bordure)
 {
     int i,j;
-    ///         2.1. Mettre la bordure si activée
+    ///         2.1. Mettre la bordure si activÃ©e
     if(_bordure)
     {
         system("mode con lines=25 cols=52");
-        for(i=0; i<COL+2; i++)
+
+        printf("%c", 201); // Affiche â•”
+        for(i=0; i<COL; i++) // Pour chaque colonne
         {
-            printf("_");
+            printf("%c",205); // Affiche â•
         }
-        printf("\n");
-        for(i=0; i<LIG; i++)
+        printf("%c\n", 187); // Affiche â•—
+
+        for(i=0; i<LIG; i++) // Pour chaque ligne
         {
-            printf("|");
+            printf("%c", 186); // Affiche â•‘
             for(j=0; j<COL; j++)
             {
                 printf("%c", _plateau[i][j]);
             }
-            printf("|\n");
+            printf("%c\n", 186); // Affiche â•‘
         }
-        for(i=0; i<COL+2; i++)
+
+        printf("%c", 200); // Affiche â•š
+        for(i=0; i<COL; i++)
         {
-            printf("_");
+            printf("%c", 205); // Affiche â•
         }
+        printf("%c", 188); // Affiche â•
     }
     else ///    2.2. Sinon, ne pas dessiner la bordure
     {
@@ -101,9 +107,10 @@ void afficherPlateau(char _plateau[LIG][COL], int _bordure)
             }
         }
 
+        // Dessiner la frontiÃ¨re entre les infos du jeu (scores et vies) et le plateau
         for(i=0; i<COL; i++)
         {
-            printf("-");
+            printf("\xC4"); // Affiche â”€
         }
     }
 }
@@ -128,12 +135,12 @@ void updateGhost(t_ghost *_ghost, char _plateau[LIG][COL], int _bordure)
 
 void deplacerGhost(t_ghost *_ghost)
 {
-    if(rand()%5 == 1) // Permet des mouvements moins "aléatoires"
+    if(rand()%5 == 1) // Permet des mouvements moins "alÃ©atoires"
     {
         _ghost->dirX=(rand()%3)-1;
         _ghost->dirY=(rand()%3)-1;
 
-        // On évite les déplacements en diagonale
+        // On Ã©vite les dÃ©placements en diagonale
         if(_ghost->dirX != 0)
         {
             _ghost->dirY = 0;
@@ -152,7 +159,7 @@ void deplacerGhost(t_ghost *_ghost)
 
 int testBordurePacman(t_pacman *_pacman, int _bordure)
 {
-    ///         3.2.1. Si bordure activé, décrémenter nombre de vie de 1 et arreter Pacman
+    ///         3.2.1. Si bordure activÃ©, dÃ©crÃ©menter nombre de vie de 1 et arreter Pacman
     if(_bordure)
     {
         if(_pacman->posX < 0)
@@ -184,7 +191,7 @@ int testBordurePacman(t_pacman *_pacman, int _bordure)
             return 1;
         }
     }
-    ///         3.2.2. Sinon, faire réapparaitre Pacman de l'autre coté
+    ///         3.2.2. Sinon, faire rÃ©apparaitre Pacman de l'autre cotÃ©
     else
     {
         if(_pacman->posX < 0)
@@ -214,7 +221,7 @@ int testBordurePacman(t_pacman *_pacman, int _bordure)
 
 int testBordureGhost(t_ghost *fantome, int _bordure)
 {
-    ///         3.5.1. Si bordure activé, faire rebondir fantôme
+    ///         3.5.1. Si bordure activÃ©, faire rebondir fantÃ´me
     if(_bordure)
     {
         if(fantome->posX<0)
@@ -242,7 +249,7 @@ int testBordureGhost(t_ghost *fantome, int _bordure)
             return 1;
         }
     }
-    ///         3.5.2. Sinon, faire réapparaitre fantôme de l'autre coté
+    ///         3.5.2. Sinon, faire rÃ©apparaitre fantÃ´me de l'autre cotÃ©
     else
     {
         if(fantome->posX < 0)
@@ -287,9 +294,9 @@ int testPacmanDiamant(t_pacman _pacman, t_diamant *_diamant, char _plateau[LIG][
     {
         ///         3.3.1. Augmenter score de 10
         *_score += 10;
-        ///         3.3.2. Décrémenter nombre de diamants restants de 1
+        ///         3.3.2. DÃ©crÃ©menter nombre de diamants restants de 1
         (*_nbDiamants)--;
-        ///         3.3.3. Mettre à jour diamant
+        ///         3.3.3. Mettre Ã  jour diamant
         _diamant->forme = ' ';
 
         return 1;
@@ -300,7 +307,8 @@ int testPacmanDiamant(t_pacman _pacman, t_diamant *_diamant, char _plateau[LIG][
 
 int testPacmanMur(t_pacman *_pacman, char _plateau[LIG][COL])
 {
-    if(_plateau[_pacman->posY][_pacman->posX] == '#')
+    if(_plateau[_pacman->posY][_pacman->posX] == '\xDB') //Si le pacman se trouve sur un â–ˆ alors
+                                                         //repositionner Ã  la position prÃ©cÃ¨dente et immobiliser le pacman
     {
         _pacman->posX = _pacman->posX - _pacman->dirX;
         _pacman->posY = _pacman->posY - _pacman->dirY;
@@ -314,8 +322,11 @@ int testPacmanMur(t_pacman *_pacman, char _plateau[LIG][COL])
 
 int testGhostMur(t_ghost *_ghost, char _plateau[LIG][COL])
 {
-    if(_plateau[_ghost->posY+_ghost->dirY][_ghost->posX+_ghost->dirX] == '#')
+    if(_plateau[_ghost->posY][_ghost->posX] == '\xDB') //Si le fantome se trouve sur un â–ˆ alors
+                                                                                 //repositionner Ã  la position prÃ©cÃ¨dente et immobiliser le pacman
     {
+        _ghost->posX = _ghost->posX - _ghost->dirX;
+        _ghost->posY = _ghost->posY - _ghost->dirY;
         _ghost->dirX = 0;
         _ghost->dirY = 0;
         return 1;
@@ -388,12 +399,12 @@ int tableau1(Parametres _params, int _score[NB_TAB])
             Sleep(50);
             break;
         }
-        ///     3.1. Mise à jour position Pacman selon la direction
+        ///     3.1. Mise Ã  jour position Pacman selon la direction
         updatePacman(&pacman,plateau, _params.bordure);
         ///     3.2. Tester collision bordure
         testBordurePacman(&pacman, _params.bordure);
         ///     3.5. Tester nombre de diamants restants
-        ///         3.5.1. Si nombre de diamants restants nul, afficher "Gagné !" et retourner 1
+        ///         3.5.1. Si nombre de diamants restants nul, afficher "GagnÃ© !" et retourner 1
         if(nbDiamants == 0)
         {
             gotoligcol(LIG/2, COL/2-3);
@@ -462,7 +473,7 @@ int tableau1(Parametres _params, int _score[NB_TAB])
                 break;
             }
         }
-        ///     3.7. Afficher éléments
+        ///     3.7. Afficher Ã©lÃ©ments
         ///         3.7.1. Afficher diamants
         for(i=0; i<5; i++)
         {
@@ -513,7 +524,7 @@ int tableau2(Parametres _params, int _score[NB_TAB])
     for(i=0; i<5;i++)
         initialiserDiamant(&diamants[i], plateau);
 
-    ///     1.3. Initialiser fantômes
+    ///     1.3. Initialiser fantÃ´mes
     for(i=0;i<4;i++)
         initialiserGhost(&fantomes[i],_params.vitesseInitale, plateau);
 
@@ -557,24 +568,23 @@ int tableau2(Parametres _params, int _score[NB_TAB])
             break;
         }
 
-        ///     3.1. Mise à jour fantômes
+        ///     3.1. Mise Ã  jour fantÃ´mes
         for(i=0;i<4;i++){
             updateGhost(&fantomes[i],plateau,_params.bordure);
-            deplacerGhost(&fantomes[i]);
         }
 
-        ///     3.2. Mise à jour position Pacman selon la direction
+        ///     3.2. Mise Ã  jour position Pacman selon la direction
         updatePacman(&pacman,plateau,_params.bordure);
 
         ///     3.3. Tester collision bordure (Pacman)
-        ///         3.3.1. Si bordure activé, décrémenter nombre de vie de 1 et faire rebondir Pacman
+        ///         3.3.1. Si bordure activÃ©, dÃ©crÃ©menter nombre de vie de 1 et faire rebondir Pacman
         testBordurePacman(&pacman,_params.bordure);
 
-        ///     3.4. Tester collision bordure (fantômes)
+        ///     3.4. Tester collision bordure (fantÃ´mes)
         for(i=0;i<4;i++)
             testBordureGhost(&fantomes[i], _params.bordure);
 
-        ///     3.5. Tester collision fantôme
+        ///     3.5. Tester collision fantÃ´me
         for(i=0;i<4;i++)
             testPacmanGhost(&pacman,fantomes[i]);
 
@@ -593,13 +603,18 @@ int tableau2(Parametres _params, int _score[NB_TAB])
         }
 
         ///     3.8. Tester nombre de diamants restants
-        ///         3.8.1. Si nombre de diamants restants nul, afficher "Gagné !" et retourner 1
+        ///         3.8.1. Si nombre de diamants restants nul, afficher "GagnÃ© !" et retourner 1
         if(nbDiamants == 0)
         {
             gotoligcol(LIG/2, COL/2-3);
             printf("WIN !");
             fin=1;
             gagne=1;
+        }
+
+        ///     3.8. Modifier la direction des fantÃ´mes alÃ©atoirement
+        for(i=0;i<4;i++){
+            deplacerGhost(&fantomes[i]);
         }
 
         ///     3.9. Appuie d'une touche utilisateur
@@ -650,7 +665,7 @@ int tableau2(Parametres _params, int _score[NB_TAB])
             }
         }
 
-        ///     3.10. Afficher éléments
+        ///     3.10. Afficher Ã©lÃ©ments
         ///         3.10.1. Afficher diamants
         for(i=0; i<5; i++)
         {
@@ -662,7 +677,7 @@ int tableau2(Parametres _params, int _score[NB_TAB])
         plateau[pacman.posY][pacman.posX] = pacman.forme;
         affiche(plateau, pacman.posX, pacman.posY, _params.bordure);
 
-        ///         3.10.3. Afficher fantômes
+        ///         3.10.3. Afficher fantÃ´mes
         for(i=0; i<4; i++)
         {
             plateau[fantomes[i].posY][fantomes[i].posX]=fantomes[i].forme;
@@ -684,25 +699,25 @@ int tableau2(Parametres _params, int _score[NB_TAB])
 
 int tableau3(Parametres _params, int _score[NB_TAB])
 {
-
-    char   plateau[LIG][COL] = {"                                                  ",
+    // design du plateau /xDB correspond Ã  â–ˆ
+    char plateau[LIG][COL] = {"                                                  ",
                                 "                                                  ",
-                                "     #####                              #####     ",
-                                "     #################     ##################     ",
-                                "     #####                              #####     ",
-                                "       #                                  #       ",
-                                "       #                                  #       ",
-                                "       #                                  #       ",
-                                "                      #####                       ",
-                                "                      #####                       ",
-                                "                      #####                       ",
-                                "                      #####                       ",
-                                "       #                                  #       ",
-                                "       #                                  #       ",
-                                "       #                                  #       ",
-                                "     #####                              #####     ",
-                                "     #################     ##################     ",
-                                "     #####                              #####     ",
+                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
+                                "     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     ",
+                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
+                                "       \xDB                                  \xDB       ",
+                                "       \xDB                                  \xDB       ",
+                                "       \xDB                                  \xDB       ",
+                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                                "       \xDB                                  \xDB       ",
+                                "       \xDB                                  \xDB       ",
+                                "       \xDB                                  \xDB       ",
+                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
+                                "     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     ",
+                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
                                 "                                                  ",
                                 "                                                  "
                                };
@@ -732,7 +747,7 @@ int tableau3(Parametres _params, int _score[NB_TAB])
     for(i=0;i<5;i++)
         initialiserDiamant(&diamants[i], plateau);
 
-    ///     1.3. Initialiser fantômes
+    ///     1.3. Initialiser fantÃ´mes
     for(i=0;i<4;i++)
         initialiserGhost(&fantomes[i],vitesseFantomes[i], plateau);
 
@@ -775,17 +790,15 @@ int tableau3(Parametres _params, int _score[NB_TAB])
             break;
         }
 
-        ///     3.1. Mise à jour Ghosts
+        ///     3.1. Mise Ã  jour Ghosts
         for(i=0;i<4;i++){
             if(compteurBoucle%fantomes[i].vitesse == 0)
             {
                 updateGhost(&fantomes[i],plateau,_params.bordure);
             }
-
-            deplacerGhost(&fantomes[i]);
         }
 
-        ///     3.2. Mise à jour Pacman
+        ///     3.2. Mise Ã  jour Pacman
         if(compteurBoucle%pacman.vitesse == 0)
             updatePacman(&pacman,plateau,_params.bordure);
 
@@ -794,11 +807,11 @@ int tableau3(Parametres _params, int _score[NB_TAB])
         ///     3.3. Tester collision bordure (Pacman)
         testBordurePacman(&pacman,_params.bordure);
 
-        ///     3.4. Tester collision bordure (fantômes)
+        ///     3.4. Tester collision bordure (fantÃ´mes)
         for(i=0;i<4;i++)
             testBordureGhost(&fantomes[i], _params.bordure);
 
-        ///     3.5. Tester collision fantôme
+        ///     3.5. Tester collision fantÃ´me
         for(i=0;i<4;i++)
             testPacmanGhost(&pacman,fantomes[i]);
 
@@ -829,13 +842,18 @@ int tableau3(Parametres _params, int _score[NB_TAB])
         }
 
         ///     3.10. Tester nombre de diamants restants
-        ///         3.10.1. Si nombre de diamants restants nul, afficher "Gagné !" et retourner 1
+        ///         3.10.1. Si nombre de diamants restants nul, afficher "GagnÃ© !" et retourner 1
         if(nbDiamants == 0)
         {
             gotoligcol(LIG/2, COL/2-3);
             printf("WIN !");
             fin=1;
             gagne=1;
+        }
+
+        ///     3.8. Modifier la direction des fantÃ´mes alÃ©atoirement
+        for(i=0;i<4;i++){
+            deplacerGhost(&fantomes[i]);
         }
 
         ///     3.11. Appuie d'une touche utilisateur
@@ -886,7 +904,7 @@ int tableau3(Parametres _params, int _score[NB_TAB])
             }
         }
 
-        ///     3.12. Afficher éléments
+        ///     3.12. Afficher Ã©lÃ©ments
         ///         3.12.1. Afficher diamants
         for(i=0; i<5; i++)
         {
@@ -898,7 +916,7 @@ int tableau3(Parametres _params, int _score[NB_TAB])
         plateau[pacman.posY][pacman.posX] = pacman.forme;
         affiche(plateau, pacman.posX, pacman.posY, _params.bordure);
 
-        ///         3.12.3. Afficher fantômes
+        ///         3.12.3. Afficher fantÃ´mes
         for(i=0; i<4; i++)
         {
             plateau[fantomes[i].posY][fantomes[i].posX]=fantomes[i].forme;

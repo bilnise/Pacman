@@ -21,18 +21,18 @@ int enregistrerSauvegarde(int _tableau,int _score[NB_TAB]);
 
 int main()
 {
-    /// Déclaration des variables
+    /// DÃ©claration des variables
     Parametres params;
     int scores[NB_TAB];
     int tableauCourant;
     int i;
 
     system("mode con lines=18 cols=50");
-    /// 1. Afficher crédits
+    /// 1. Afficher crÃ©dits
     credits();
     Sleep(2000);
 
-    /// 2. Initialiser paramètres par défaut
+    /// 2. Initialiser paramÃ¨tres par dÃ©faut
     params.vitesseInitale = 1;
     params.bordure = 1;
 
@@ -59,31 +59,31 @@ int main()
 
 void afficherTitre()
 {
-    printf("##################################################\n");
-    printf("#     _____                                      #\n");
-    printf("#    |  __ \\                                     #\n");
-    printf("#    | |__) |_ _  ___ _ __ ___   __ _ _ __       #\n");
-    printf("#    |  ___/ _` |/ __| '_ ` _ \\ / _` | '_ \\      #\n");
-    printf("#    | |  | (_| | (__| | | | | | (_| | | | |     #\n");
-    printf("#    |_|   \\__,_|\\___|_| |_| |_|\\__,_|_| |_|     #\n");
-    printf("#                                                #\n");
-    printf("##################################################\n");
+    printf("\xDB\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDB\n");
+    printf("\xDB     _____                                      \xDB\n");
+    printf("\xDB    |  __ \\                                     \xDB\n");
+    printf("\xDB    | |__) |_ _  ___ _ __ ___   __ _ _ __       \xDB\n");
+    printf("\xDB    |  ___/ _` |/ __| '_ ` _ \\ / _` | '_ \\      \xDB\n");
+    printf("\xDB    | |  | (_| | (__| | | | | | (_| | | | |     \xDB\n");
+    printf("\xDB    |_|   \\__,_|\\___|_| |_| |_|\\__,_|_| |_|     \xDB\n");
+    printf("\xDB                                                \xDB\n");
+    printf("\xDB\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDB\n");
 }
 
 void credits()
 {
-    printf("##################################################\n");
-    printf("#     _____                                      #\n");
-    printf("#    |  __ \\                                     #\n");
-    printf("#    | |__) |_ _  ___ _ __ ___   __ _ _ __       #\n");
-    printf("#    |  ___/ _` |/ __| '_ ` _ \\ / _` | '_ \\      #\n");
-    printf("#    | |  | (_| | (__| | | | | | (_| | | | |     #\n");
-    printf("#    |_|   \\__,_|\\___|_| |_| |_|\\__,_|_| |_|     #\n");
-    printf("#                                                #\n");
-    printf("#    Par : Kevin SPIERO, Adrien DECHARRIERE et   #\n");
-    printf("#          Celia BENMERAD                        #\n");
-    printf("#                                                #\n");
-    printf("##################################################\n");
+    printf("\xDB\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDF\xDB\n");
+    printf("\xDB     _____                                      \xDB\n");
+    printf("\xDB    |  __ \\                                     \xDB\n");
+    printf("\xDB    | |__) |_ _  ___ _ __ ___   __ _ _ __       \xDB\n");
+    printf("\xDB    |  ___/ _` |/ __| '_ ` _ \\ / _` | '_ \\      \xDB\n");
+    printf("\xDB    | |  | (_| | (__| | | | | | (_| | | | |     \xDB\n");
+    printf("\xDB    |_|   \\__,_|\\___|_| |_| |_|\\__,_|_| |_|     \xDB\n");
+    printf("\xDB                                                \xDB\n");
+    printf("\xDB    Par : Kevin SPIERO, Adrien DECHARRIERE et   \xDB\n");
+    printf("\xDB          Celia BENMERAD                        \xDB\n");
+    printf("\xDB                                                \xDB\n");
+    printf("\xDB\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDC\xDB\n");
 }
 
 void regles()
@@ -215,7 +215,7 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
         printf("                6. Afficher les scores\n");
         printf("                7. Quitter\n");
 
-        /// Enregistrer dès que l'on revient au menu après avoir lancer une partie
+        /// Enregistrer dÃ¨s que l'on revient au menu aprÃ¨s avoir lancer une partie
         if(!save)
         {
             if(!enregistrerSauvegarde(*_tableauCourant, _scores))
@@ -223,14 +223,14 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
             else
             {
                 printf("Sauvegarde reussi !");
-                save = 1; // Sauvegarde réalisée
+                save = 1; // Sauvegarde rÃ©alisÃ©e
             }
         }
 
         /// 3.2. Attente du choix de l'utilisateur
         touche = getch();
 
-        /// Lancer la procédure correspondant au choix
+        /// Lancer la procÃ©dure correspondant au choix
         switch(touche)
         {
         case '&':
@@ -238,7 +238,7 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
             regles();
             break;
 
-        case -126: // é
+        case -126: // Ã©
         case '2':
             regler_vitesse(&_params->vitesseInitale);
             break;
@@ -272,7 +272,7 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
             afficherScores(_scores);
             break;
 
-        case -118: // è
+        case -118: // Ã¨
         case '7':
             return;
         }
