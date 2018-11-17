@@ -28,18 +28,20 @@ typedef struct diamant {
     char forme;
 }t_diamant;
 
-typedef struct data {
+typedef struct corps {
     int posX;
     int posY;
     char forme;
     int dirX;
     int dirY;
-    int vitesse;
-}t_data;
-
-typedef struct corps {
-    t_data infos;
     struct corps *suivant;
+    struct corps *precedent;
 }t_corps;
+
+typedef struct snake {
+    t_corps *ancre;
+    int vies;
+    int vitesse;
+}t_snake;
 
 #endif // ENTITE_H_INCLUDED

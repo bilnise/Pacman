@@ -27,6 +27,8 @@ int main()
     int tableauCourant;
     int i;
 
+    srand(time(NULL));
+
     system("mode con lines=18 cols=50");
     /// 1. Afficher crédits
     credits();
