@@ -4,9 +4,10 @@
 #include "windows.h"
 #include "time.h"
 
-#include "Jeu.h"
-#include "Parametres.h"
 #include "Constantes.h"
+#include "Entite.h"
+#include "Tableaux.h"
+#include "Parametres.h"
 #include "utils.h"
 
 void afficherTitre();
@@ -14,50 +15,11 @@ void credits();
 void regles();
 void reglerBordure(int *_bordure);
 void reglerVitesse(int *_vitesseInitiale);
-void afficherScores(int _scores[NB_TAB]);
-int chargerSauvegarde(int _scores[NB_TAB], int *_tableauCourant);
-void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant);
-int enregistrerSauvegarde(int _tableau,int _score[NB_TAB]);
-
-int main()
-{
-    /// D√©claration des variables
-    Parametres params;
-    int scores[NB_TAB];
-    int tableauCourant;
-    int i;
-
-    srand(time(NULL));
-
-    system("mode con lines=18 cols=50");
-    /// 1. Afficher cr√©dits
-    credits();
-    Sleep(2000);
-
-    /// 2. Initialiser param√®tres par d√©faut
-    params.vitesseInitale = 1;
-    params.bordure = 1;
-
-    /// 3. Initialiser scores et tableau courant
-    for(i=0; i<NB_TAB; i++)
-    {
-        scores[i] = 0;
-    }
-
-    tableauCourant = 1;
-
-    /// 4. Charger sauvegarde
-    if(!chargerSauvegarde(scores, &tableauCourant))
-        printf("Impossible de charger la sauvegarde");
-    else
-        printf("Chargement de la sauvegarde reussi !");
-    Sleep(1000);
-
-    /// 5. Lancer menu
-    menu(&params, scores, &tableauCourant);
-
-    return 0;
-}
+void afficherScores(int _scores[NB_TAB], int _partie);
+int chargerSauvegarde(int _scores[NB_TAB], int *_tableauCourant, int *_partie);
+void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant, int *_partie);
+int enregistrerSauvegarde(int _tableau,int _score[NB_TAB], int _partie);
+void jeu(Parametres *_params, int _scores[NB_TAB], int *_tableau, int *_partie);
 
 void afficherTitre()
 {
@@ -93,9 +55,12 @@ void regles()
     char touche;
 
     system("cls");
+    system("mode con lines=30 cols=50");
     afficherTitre();
-    printf("                  Regles du jeu :\n");
-    printf("Tableau 1 : \n");
+    printf("                  Regles du jeu :\n\n");
+    printf("\tLe PACMAN est un jeu classique dans\n\tlequel un personnage se deplace\n\tdans un espace plus ou moins\n\tcomplexe pour manger des diamants.\n\tIl peut aller dans 4 directions a\n\tl'aide du clavier et doit eviter de\n\tse faire attraper par des fantomes\n\tqui sillonnent l'espace de jeu.\n\n");
+    printf("\tLe but du jeu de base est de\n\treussir a manger les diamants presents\n\tsur 4 tableaux de difficulte\n\tcroissante. Les obstacles qui\n\tbarrent la route du PACMAN sont\n\tnombreux et certains sont meme mortels.\n\tHeureusement le PACMAN dispose de 5\n\tvies pour mener a bien sa mission.\n\n");
+    printf("Appuyer sur q pour revenir au menu");
 
     do
     {
@@ -110,11 +75,15 @@ void regler_bordure(int *_bordure)
 
     system("cls");
     afficherTitre();
-    printf("           Activer/Desactiver bordure :\n");
+    printf("           Activer/Desactiver bordure :\n\n\n\n\n\n\n");
+    printf("Appuyer sur q pour revenir au menu\n");
+    printf("Appuyer sur Entrer pour modifier la valeur");
+
+
 
     do
     {
-        gotoligcol(11,0);
+        gotoligcol(12,0);
         if(*_bordure)
             printf("Bordure : OUI\n");
         else
@@ -135,34 +104,36 @@ void regler_vitesse(int *_vitesseInitiale)
 
     system("cls");
     afficherTitre();
-    printf("         Regler vitesse :\n");
+    printf("\t\tRegler vitesse :\n\n\n\n\n\n\n");
+    printf("Appuyer sur q pour revenir au menu\n");
+    printf("Appuyer sur Entrer pour modifier la valeur");
 
     do
     {
-        gotoligcol(11,0);
+        gotoligcol(12,0);
         printf("Vitesse initiale : %d\n", *_vitesseInitiale);
 
         touche = getch();
-        if(touche == 'p')
+        if(touche == '\r')
             *_vitesseInitiale = 1+(*_vitesseInitiale)%3;
 
     }
     while(touche != 'q');
 }
 
-void afficherScores(int _scores[NB_TAB])
+void afficherScores(int _scores[NB_TAB], int _partie)
 {
     int i;
     char touche;
 
     system("cls");
     afficherTitre();
-    printf("                  Scores :\n");
+    printf("Partie : %d            Scores :\n", _partie);
     printf("\n");
 
     for(i=0; i<NB_TAB; i++)
     {
-        printf("Tableau %d : %d\n", i+1, _scores[i]);
+        printf("\t\t  Tableau %d : %d\n", i+1, _scores[i]);
     }
 
     do
@@ -172,7 +143,7 @@ void afficherScores(int _scores[NB_TAB])
     while(touche != 'q');
 }
 
-int chargerSauvegarde(int scores[NB_TAB], int *tableauCourant)
+int chargerSauvegarde(int _scores[NB_TAB], int *_tableauCourant, int *_partie)
 {
     FILE* fichier;
     fichier = fopen("save.txt", "r");
@@ -180,10 +151,10 @@ int chargerSauvegarde(int scores[NB_TAB], int *tableauCourant)
     if(fichier)
     {
         int i;
-        fscanf(fichier, "%d", tableauCourant);
+        fscanf(fichier, "%d %d", _tableauCourant, _partie);
         for(i=0; i<NB_TAB; i++)
         {
-            fscanf(fichier, "%d", &scores[i]);
+            fscanf(fichier, "%d", &_scores[i]);
         }
         fclose(fichier);
     }
@@ -195,7 +166,7 @@ int chargerSauvegarde(int scores[NB_TAB], int *tableauCourant)
     return 1;
 }
 
-void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
+void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant, int *_partie)
 {
     char touche;
     int i;
@@ -217,22 +188,22 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
         printf("                6. Afficher les scores\n");
         printf("                7. Quitter\n");
 
-        /// Enregistrer d√®s que l'on revient au menu apr√®s avoir lancer une partie
+        /// Enregistrer dËs que l'on revient au menu aprËs avoir lancer une partie
         if(!save)
         {
-            if(!enregistrerSauvegarde(*_tableauCourant, _scores))
+            if(!enregistrerSauvegarde(*_tableauCourant, _scores, *_partie))
                 printf("Impossible de sauvegarder");
             else
             {
                 printf("Sauvegarde reussi !");
-                save = 1; // Sauvegarde r√©alis√©e
+                save = 1; // Sauvegarde rÈalisÈe
             }
         }
 
         /// 3.2. Attente du choix de l'utilisateur
         touche = getch();
 
-        /// Lancer la proc√©dure correspondant au choix
+        /// Lancer la procÈdure correspondant au choix
         switch(touche)
         {
         case '&':
@@ -240,7 +211,7 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
             regles();
             break;
 
-        case -126: // √©
+        case -126: // È
         case '2':
             regler_vitesse(&_params->vitesseInitale);
             break;
@@ -253,28 +224,29 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
         case '\'':
         case '4':
             *_tableauCourant = 1;
+            *_partie = 1;
 
             for(i=0; i<NB_TAB; i++)
             {
                 _scores[i] = 0;
             }
 
-            jeu(*_params, _scores,_tableauCourant);
+            jeu(_params, _scores,_tableauCourant, _partie);
             save = 0;
             break;
 
         case '(':
         case '5':
-            jeu(*_params,_scores,_tableauCourant);
+            jeu(_params,_scores,_tableauCourant, _partie);
             save = 0;
             break;
 
         case '-':
         case '6':
-            afficherScores(_scores);
+            afficherScores(_scores, *_partie);
             break;
 
-        case -118: // √®
+        case -118: // Ë
         case '7':
             return;
         }
@@ -283,7 +255,7 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant)
 
 }
 
-int enregistrerSauvegarde(int _tableau,int _score[NB_TAB])
+int enregistrerSauvegarde(int _tableau,int _score[NB_TAB],int _partie)
 {
     int i;
     FILE* fichier;
@@ -292,7 +264,7 @@ int enregistrerSauvegarde(int _tableau,int _score[NB_TAB])
 
     if(fichier)
     {
-        fprintf(fichier, "%d\n", _tableau);
+        fprintf(fichier, "%d %d\n", _tableau, _partie);
 
         for(i=0; i<NB_TAB; i++)
         {
@@ -307,4 +279,86 @@ int enregistrerSauvegarde(int _tableau,int _score[NB_TAB])
     {
         return 0;
     }
+}
+
+void jeu(Parametres *_params, int _scores[NB_TAB], int *_tableau, int *_partie)
+{
+    switch(*_tableau)
+    {
+    case 1:
+        if(tableau1(_params,_scores,*_partie*NB_INITIAL_DIAMANTS))
+            *_tableau = 2;
+        else
+            _scores[0] = 0;
+        break;
+
+    case 2:
+        if(tableau2(_params,_scores,*_partie*NB_INITIAL_DIAMANTS))
+            *_tableau = 3;
+        else
+            _scores[1] = 0;
+        break;
+
+    case 3:
+        if(tableau3(_params,_scores,*_partie*NB_INITIAL_DIAMANTS))
+            *_tableau = 4;
+        else
+            _scores[2] = 0;
+        break;
+
+    case 4:
+        if(tableau4(_params,_scores,*_partie*NB_INITIAL_DIAMANTS))
+        {
+            *_tableau = 1;
+            (*_partie)++;
+        }
+        else
+            _scores[3] = 0;
+        break;
+    }
+}
+
+int main()
+{
+    /// DÈclaration des variables
+    Parametres params;
+    int scores[NB_TAB];
+    int tableauCourant;
+    int partie;
+    int i;
+
+    srand(time(NULL));
+
+    system("mode con lines=18 cols=50");
+    /// 1. Afficher crÈdits
+    credits();
+    Sleep(2000);
+
+    /// 2. Initialiser paramËtres par dÈfaut
+    params.vitesseInitale = 1;
+    params.bordure = 1;
+
+    /// 3. Initialiser scores et tableau courant
+    for(i=0; i<NB_TAB; i++)
+    {
+        scores[i] = 0;
+    }
+
+    tableauCourant = 1;
+
+    /// 4.Initialiser numÈro partie
+    partie = 1;
+
+    /// 5. Charger sauvegarde
+    if(!chargerSauvegarde(scores, &tableauCourant, &partie))
+        printf("Impossible de charger la sauvegarde");
+    else
+        printf("Chargement de la sauvegarde reussi !");
+
+    Sleep(1000);
+
+    /// 6. Lancer menu
+    menu(&params, scores, &tableauCourant, &partie);
+
+    return 0;
 }

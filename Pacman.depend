@@ -51,51 +51,62 @@
 
 1541684369 c:\users\bilni\onedrive\documents\td_info\pacman 2\entite.h
 
-1541874417 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\jeu.c
+1542481532 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\jeu.c
 	"Jeu.h"
 	"Tableaux.h"
 
-1541874417 c:\users\bilni\onedrive\documents\td_info\projets\pacman\jeu.h
+1542481098 c:\users\bilni\onedrive\documents\td_info\projets\pacman\jeu.h
 	"Parametres.h"
 	"Constantes.h"
 
-1541874417 c:\users\bilni\onedrive\documents\td_info\projets\pacman\parametres.h
-	<stdio.h>
+1542482477 c:\users\bilni\onedrive\documents\td_info\projets\pacman\parametres.h
 
-1541874417 c:\users\bilni\onedrive\documents\td_info\projets\pacman\constantes.h
+1542479248 c:\users\bilni\onedrive\documents\td_info\projets\pacman\constantes.h
 
-1542426542 c:\users\bilni\onedrive\documents\td_info\projets\pacman\tableaux.h
-	"windows.h"
-	"time.h"
-	"conio.h"
-	"Entite.h"
-	"Parametres.h"
-	"Constantes.h"
-	"utils.h"
-	"Jeu.h"
-
-1542426039 c:\users\bilni\onedrive\documents\td_info\projets\pacman\entite.h
-
-1542426040 c:\users\bilni\onedrive\documents\td_info\projets\pacman\utils.h
-	"windows.h"
-
-1542426040 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\main.c
+1542482702 c:\users\bilni\onedrive\documents\td_info\projets\pacman\tableaux.h
 	<stdio.h>
 	<stdlib.h>
 	<conio.h>
 	"windows.h"
 	"time.h"
-	"Jeu.h"
-	"Parametres.h"
 	"Constantes.h"
+	"Entite.h"
+	"Tableaux.h"
+	"Parametres.h"
+	"utils.h"
+
+1542467113 c:\users\bilni\onedrive\documents\td_info\projets\pacman\entite.h
+
+1542482672 c:\users\bilni\onedrive\documents\td_info\projets\pacman\utils.h
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	"windows.h"
+	"time.h"
+	"Constantes.h"
+	"Entite.h"
+	"Tableaux.h"
+	"Parametres.h"
+	"utils.h"
+
+1542485566 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\main.c
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	"windows.h"
+	"time.h"
+	"Constantes.h"
+	"Entite.h"
+	"Tableaux.h"
+	"Parametres.h"
 	"utils.h"
 
 1541874417 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\parametres.c
 	"Parametres.h"
 
-1542049502 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\utils.c
+1542482699 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\utils.c
 	"utils.h"
 
-1542417063 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\tableaux.c
+1542482700 source:c:\users\bilni\onedrive\documents\td_info\projets\pacman\tableaux.c
 	"Tableaux.h"
 

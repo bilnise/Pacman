@@ -1,5 +1,6 @@
 #include "Tableaux.h"
 
+
 void initialiserPacman(t_pacman *_pacman, int _vitesseInitiale, char _plateau[LIG][COL])
 {
     _pacman->forme = 'X';
@@ -110,7 +111,7 @@ void afficherPlateau(char _plateau[LIG][COL], int _bordure)
     ///         2.1. Mettre la bordure si activée
     if(_bordure)
     {
-        system("mode con lines=25 cols=52");
+        system("mode con lines=27 cols=52");
 
         printf("%c", 201); // Affiche ╔
         for(i=0; i<COL; i++) // Pour chaque colonne
@@ -138,7 +139,7 @@ void afficherPlateau(char _plateau[LIG][COL], int _bordure)
     }
     else ///    2.2. Sinon, ne pas dessiner la bordure
     {
-        system("mode con lines=25 cols=50");
+        system("mode con lines=27 cols=50");
         for(i=0; i<LIG; i++)
         {
             for(j=0; j<COL; j++)
@@ -166,6 +167,28 @@ void afficherSnake(t_snake *_snake, char _plateau[LIG][COL], int _bordure)
         affiche(_plateau, pt->posX, pt->posY, _bordure);
         pt = pt->suivant;
     }
+}
+
+void effacerSnake(t_snake *_snake, char plateau[LIG][COL])
+{
+    t_corps *pt;
+
+    pt=_snake->ancre;
+
+    if(pt == NULL)
+    {
+        return;
+    }
+    else
+    {
+        while(pt!=NULL)
+        {
+            pt->forme = ' ';
+            plateau[pt->posY][pt->posX] = pt->forme;
+            pt = pt->suivant;
+        }
+    }
+
 }
 
 void updatePacman(t_pacman *_pacman, char _plateau[LIG][COL], int _bordure)
@@ -474,7 +497,6 @@ int testTeteSnakeGhost(t_snake *_snake, t_ghost *_ghost)
 {
     if((_snake->ancre->posX==_ghost->posX)&&(_snake->ancre->posY==_ghost->posY))
     {
-        _snake->vies--;
         return 1;
     }
 
@@ -485,6 +507,7 @@ int testCorpsSnakeGhost(t_snake *_snake, t_ghost *_ghost, t_corps **_queueAcoupe
 {
     t_corps *pt;
 
+///             3.8.1.	Chercher l’élément touché par un fantôme
     pt = _snake->ancre->suivant;
     while(pt!=NULL)
     {
@@ -492,6 +515,25 @@ int testCorpsSnakeGhost(t_snake *_snake, t_ghost *_ghost, t_corps **_queueAcoupe
         {
             *_queueAcouper = pt;
             return 1;
+        }
+
+        pt = pt->suivant;
+    }
+
+    return 0;
+}
+
+int testCorpsTeteSnake(t_snake *_snake)
+{
+    t_corps *pt;
+
+    pt = _snake->ancre;
+    while(pt!=NULL)
+    {
+        if(pt->suivant != NULL)
+        {
+            if(_snake->ancre->posX == pt->suivant->posX && _snake->ancre->posY == pt->suivant->posY)
+                return 1;
         }
 
         pt = pt->suivant;
@@ -599,17 +641,49 @@ void supprimer_queue(t_snake *_snake, t_corps *_queueAcouper)
     }
 }
 
-int tableau1(Parametres _params, int _score[NB_TAB])
+void supprimerSnake(t_snake *_snake)
+{
+    t_corps *pt;
+
+    while(_snake->ancre != NULL)
+    {
+        if(_snake->ancre->suivant == NULL)
+        {
+            free(_snake->ancre);
+            _snake->ancre = NULL;
+        }
+        else
+        {
+            pt = _snake->ancre;
+            while(pt->suivant->suivant != NULL)
+            {
+                pt = pt->suivant;
+            }
+
+            free(pt->suivant);
+            pt->suivant = NULL;
+        }
+    }
+}
+
+int tableau1(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 {
     char plateau[LIG][COL];
     int nbDiamants, i, j, fin, gagne;
-    t_diamant diamants[5];
+    t_diamant *diamants;
     t_pacman pacman;
 
     /// 1. Initialiser tableau
-    nbDiamants = 5;
+    nbDiamants = _totalDiamants;
     fin = 0;
     gagne = 0;
+
+    diamants = (t_diamant*)malloc(_totalDiamants*sizeof(t_diamant));
+    if(!diamants)
+    {
+        printf("Erreur initialisation des diamants. Veuillez relancer le jeu.");
+        return 0;
+    }
 
     for(i=0; i<LIG; i++)
     {
@@ -620,24 +694,24 @@ int tableau1(Parametres _params, int _score[NB_TAB])
     }
 
     ///     1.1. Initialiser pacman
-    initialiserPacman(&pacman, _params.vitesseInitale, plateau);
+    initialiserPacman(&pacman, _params->vitesseInitale, plateau);
 
     ///     1.2. Initialiser les diamants
-    for(i=0; i<5; i++)
+    for(i=0; i<_totalDiamants; i++)
     {
         initialiserDiamant(&diamants[i], plateau);
     }
 
     ///     1.3. Initialiser plateau
     plateau[pacman.posY][pacman.posX] = pacman.forme;
-    for(i=0; i<5; i++)
+    for(i=0; i<_totalDiamants; i++)
     {
         plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
     }
 
     system("cls");
     /// 2. Afficher plateau
-    afficherPlateau(plateau, _params.bordure);
+    afficherPlateau(plateau, _params->bordure);
 
     gotoligcol(LIG+3,0);
     printf("Score : %d",_score[0]);
@@ -645,10 +719,13 @@ int tableau1(Parametres _params, int _score[NB_TAB])
     gotoligcol(LIG+4,0);
     printf("Vies : %d",pacman.vies);
 
+    printf("\nAppuyer sur q pour revenir au menu\n");
+    printf("Appuyer sur p pour mettre en pause");
+
     /// 3. Boucle de jeu
     while(!fin)
     {
-        switch(_params.vitesseInitale)
+        switch(_params->vitesseInitale)
         {
         case 1:
             Sleep(200);
@@ -663,9 +740,9 @@ int tableau1(Parametres _params, int _score[NB_TAB])
             break;
         }
         ///     3.1. Mise à jour position Pacman selon la direction
-        updatePacman(&pacman,plateau, _params.bordure);
+        updatePacman(&pacman,plateau, _params->bordure);
         ///     3.2. Tester collision bordure
-        testBordurePacman(&pacman, _params.bordure);
+        testBordurePacman(&pacman, _params->bordure);
         ///     3.5. Tester nombre de diamants restants
         ///         3.5.1. Si nombre de diamants restants nul, afficher "Gagné !" et retourner 1
         if(nbDiamants == 0)
@@ -687,7 +764,7 @@ int tableau1(Parametres _params, int _score[NB_TAB])
             fin = 1;
         }
         ///     3.3. Tester collision diamant
-        for(i=0;i<5;i++)
+        for(i=0;i<_totalDiamants;i++)
         {
             if(testPacmanDiamant(&pacman,&diamants[i],plateau))
             {
@@ -746,14 +823,14 @@ int tableau1(Parametres _params, int _score[NB_TAB])
         }
         ///     3.7. Afficher éléments
         ///         3.7.1. Afficher diamants
-        for(i=0; i<5; i++)
+        for(i=0; i<_totalDiamants; i++)
         {
             plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
-            affiche(plateau, diamants[i].posX, diamants[i].posY, _params.bordure);
+            affiche(plateau, diamants[i].posX, diamants[i].posY, _params->bordure);
         }
         ///         3.7.2. Afficher Pacman
         plateau[pacman.posY][pacman.posX] = pacman.forme;
-        affiche(plateau, pacman.posX, pacman.posY, _params.bordure);
+        affiche(plateau, pacman.posX, pacman.posY, _params->bordure);
         ///         3.7.3. Afficher score
         gotoligcol(LIG+3,8);
         printf("%d",_score[0]);
@@ -762,21 +839,30 @@ int tableau1(Parametres _params, int _score[NB_TAB])
         printf("%d",pacman.vies);
     }
 
+    free(diamants);
+
     return gagne;
 }
 
-int tableau2(Parametres _params, int _score[NB_TAB])
+int tableau2(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 {
     char plateau[LIG][COL];
     int nbDiamants, i, j, fin, gagne;
-    t_diamant diamants[5];
+    t_diamant *diamants;
     t_pacman pacman;
-    t_ghost fantomes[4];
+    t_ghost fantomes[NB_GHOSTS];
 
     /// 1. Initialiser tableau
-    nbDiamants = 5;
+    nbDiamants = _totalDiamants;
     fin = 0;
     gagne = 0;
+
+    diamants = (t_diamant*)malloc(_totalDiamants*sizeof(t_diamant));
+    if(!diamants)
+    {
+        printf("Erreur initialisation des diamants. Veuillez relancer le jeu.");
+        return 0;
+    }
 
     for(i=0; i<LIG; i++)
     {
@@ -787,31 +873,31 @@ int tableau2(Parametres _params, int _score[NB_TAB])
     }
 
     ///     1.1. Initialiser pacman
-    initialiserPacman(&pacman,_params.vitesseInitale, plateau);
+    initialiserPacman(&pacman,_params->vitesseInitale, plateau);
 
     ///     1.2. Initialiser les diamants
-    for(i=0; i<5;i++)
+    for(i=0; i<_totalDiamants;i++)
         initialiserDiamant(&diamants[i], plateau);
 
     ///     1.3. Initialiser fantômes
-    for(i=0;i<4;i++)
-        initialiserGhost(&fantomes[i],_params.vitesseInitale, plateau);
+    for(i=0;i<NB_GHOSTS;i++)
+        initialiserGhost(&fantomes[i],_params->vitesseInitale, plateau);
 
     ///     1.4. Initialiser plateau
     plateau[pacman.posY][pacman.posX] = pacman.forme;
-    for(i=0; i<5; i++)
+    for(i=0; i<_totalDiamants; i++)
     {
         plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
     }
 
-    for(i=0; i<4; i++)
+    for(i=0; i<NB_GHOSTS; i++)
     {
         plateau[fantomes[i].posY][fantomes[i].posX]=fantomes[i].forme;
     }
 
 
     /// 2. Afficher plateau
-    afficherPlateau(plateau,_params.bordure);
+    afficherPlateau(plateau,_params->bordure);
 
     gotoligcol(LIG+3,0);
     printf("Score : %d",_score[0]+_score[1]);
@@ -819,10 +905,13 @@ int tableau2(Parametres _params, int _score[NB_TAB])
     gotoligcol(LIG+4,0);
     printf("Vies : %d",pacman.vies);
 
+    printf("\nAppuyer sur q pour revenir au menu\n");
+    printf("Appuyer sur p pour mettre en pause");
+
     /// 3. Boucle de jeu
     while(!fin)
     {
-        switch(_params.vitesseInitale)
+        switch(_params->vitesseInitale)
         {
         case 1:
             Sleep(200);
@@ -838,27 +927,27 @@ int tableau2(Parametres _params, int _score[NB_TAB])
         }
 
         ///     3.1. Mise à jour fantômes
-        for(i=0;i<4;i++){
-            updateGhost(&fantomes[i],plateau,_params.bordure);
+        for(i=0;i<NB_GHOSTS;i++){
+            updateGhost(&fantomes[i],plateau,_params->bordure);
         }
 
         ///     3.2. Mise à jour Pacman
-        updatePacman(&pacman,plateau,_params.bordure);
+        updatePacman(&pacman,plateau,_params->bordure);
 
         ///     3.3. Tester collision bordure (Pacman)
         ///         3.3.1. Si bordure activé, décrémenter nombre de vie de 1 et faire rebondir Pacman
-        testBordurePacman(&pacman,_params.bordure);
+        testBordurePacman(&pacman,_params->bordure);
 
         ///     3.4. Tester collision bordure (fantômes)
-        for(i=0;i<4;i++)
-            testBordureGhost(&fantomes[i], _params.bordure);
+        for(i=0;i<NB_GHOSTS;i++)
+            testBordureGhost(&fantomes[i], _params->bordure);
 
         ///     3.5. Tester collision fantôme
-        for(i=0;i<4;i++)
+        for(i=0;i<NB_GHOSTS;i++)
             testPacmanGhost(&pacman,&fantomes[i]);
 
         ///     3.6. Tester collision diamant
-        for(i=0;i<5;i++)
+        for(i=0;i<_totalDiamants;i++)
         {
             if(testPacmanDiamant(&pacman,&diamants[i],plateau))
             {
@@ -890,7 +979,7 @@ int tableau2(Parametres _params, int _score[NB_TAB])
         }
 
         ///     3.8. Modifier la direction des fantômes aléatoirement
-        for(i=0;i<4;i++){
+        for(i=0;i<NB_GHOSTS;i++){
             deplacerGhost(&fantomes[i]);
         }
 
@@ -944,21 +1033,21 @@ int tableau2(Parametres _params, int _score[NB_TAB])
 
         ///     3.10. Afficher éléments
         ///         3.10.1. Afficher diamants
-        for(i=0; i<5; i++)
+        for(i=0; i<_totalDiamants; i++)
         {
             plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
-            affiche(plateau, diamants[i].posX, diamants[i].posY, _params.bordure);
+            affiche(plateau, diamants[i].posX, diamants[i].posY, _params->bordure);
         }
 
         ///         3.10.2. Afficher Pacman
         plateau[pacman.posY][pacman.posX] = pacman.forme;
-        affiche(plateau, pacman.posX, pacman.posY, _params.bordure);
+        affiche(plateau, pacman.posX, pacman.posY, _params->bordure);
 
         ///         3.10.3. Afficher fantômes
-        for(i=0; i<4; i++)
+        for(i=0; i<NB_GHOSTS; i++)
         {
             plateau[fantomes[i].posY][fantomes[i].posX]=fantomes[i].forme;
-            affiche(plateau, fantomes[i].posX, fantomes[i].posY, _params.bordure);
+            affiche(plateau, fantomes[i].posX, fantomes[i].posY, _params->bordure);
         }
 
         ///         3.10.4. Afficher score
@@ -970,11 +1059,12 @@ int tableau2(Parametres _params, int _score[NB_TAB])
         printf("%d",pacman.vies);
     }
 
+    free(diamants);
     Sleep(2000);
     return gagne;
 }
 
-int tableau3(Parametres _params, int _score[NB_TAB])
+int tableau3(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 {
     // design du plateau /xDB correspond à █
     char plateau[LIG][COL] = {"                                                  ",
@@ -999,13 +1089,13 @@ int tableau3(Parametres _params, int _score[NB_TAB])
                                 "                                                  "
                                };
     int nbDiamants, i, fin, gagne, compteurBoucle;
-    int vitesseFantomes[4];
-    t_diamant diamants[5];
+    int vitesseFantomes[NB_GHOSTS];
+    t_diamant *diamants;
     t_pacman pacman;
-    t_ghost fantomes[4];
+    t_ghost fantomes[NB_GHOSTS];
 
     /// 1. Initialiser tableau
-    nbDiamants = 5;
+    nbDiamants = _totalDiamants;
     fin = 0;
     gagne = 0;
     compteurBoucle = 0;
@@ -1015,31 +1105,38 @@ int tableau3(Parametres _params, int _score[NB_TAB])
     vitesseFantomes[2] = 1;
     vitesseFantomes[3] = 1;
 
+    diamants = (t_diamant*)malloc(_totalDiamants*sizeof(t_diamant));
+    if(!diamants)
+    {
+        printf("Erreur initialisation des diamants. Veuillez relancer le jeu.");
+        return 0;
+    }
+
     ///     1.1. Initialiser pacman
-    initialiserPacman(&pacman,6, plateau);
+    initialiserPacman(&pacman,5, plateau);
 
     ///     1.2. Initialiser les diamants
-    for(i=0;i<5;i++)
+    for(i=0;i<_totalDiamants;i++)
         initialiserDiamant(&diamants[i], plateau);
 
     ///     1.3. Initialiser fantômes
-    for(i=0;i<4;i++)
+    for(i=0;i<NB_GHOSTS;i++)
         initialiserGhost(&fantomes[i],vitesseFantomes[i], plateau);
 
     ///     1.4. Initialiser plateau
     plateau[pacman.posY][pacman.posX] = pacman.forme;
-    for(i=0; i<5; i++)
+    for(i=0; i<_totalDiamants; i++)
     {
         plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
     }
 
-    for(i=0; i<4; i++)
+    for(i=0; i<NB_GHOSTS; i++)
     {
         plateau[fantomes[i].posY][fantomes[i].posX]=fantomes[i].forme;
     }
 
     /// 2. Afficher plateau
-    afficherPlateau(plateau,_params.bordure);
+    afficherPlateau(plateau,_params->bordure);
 
     gotoligcol(LIG+3,0);
     printf("Score : %d",_score[0]+_score[1]+_score[2]);
@@ -1047,10 +1144,12 @@ int tableau3(Parametres _params, int _score[NB_TAB])
     gotoligcol(LIG+4,0);
     printf("Vies : %d",pacman.vies);
 
+    printf("\nAppuyer sur q pour revenir au menu\n");
+    printf("Appuyer sur p pour mettre en pause");
     /// 3. Boucle de jeu
     while(!fin)
     {
-        switch(_params.vitesseInitale)
+        switch(_params->vitesseInitale)
         {
         case 1:
             Sleep(200);
@@ -1066,32 +1165,32 @@ int tableau3(Parametres _params, int _score[NB_TAB])
         }
 
         ///     3.1. Mise à jour Ghosts selon la vitesse des fantômes
-        for(i=0;i<4;i++){
+        for(i=0;i<NB_GHOSTS;i++){
             if(compteurBoucle%fantomes[i].vitesse == 0)
             {
-                updateGhost(&fantomes[i],plateau,_params.bordure);
+                updateGhost(&fantomes[i],plateau,_params->bordure);
             }
         }
 
         ///     3.2. Mise à jour Pacman selon la vitesse du pacman
         if(compteurBoucle%pacman.vitesse == 0)
-            updatePacman(&pacman,plateau,_params.bordure);
+            updatePacman(&pacman,plateau,_params->bordure);
 
         ///     3.3. Traquer Pacman (pathfinding A*)
 
         ///     3.3. Tester collision bordure (Pacman)
-        testBordurePacman(&pacman,_params.bordure);
+        testBordurePacman(&pacman,_params->bordure);
 
         ///     3.4. Tester collision bordure (fantômes)
-        for(i=0;i<4;i++)
-            testBordureGhost(&fantomes[i], _params.bordure);
+        for(i=0;i<NB_GHOSTS;i++)
+            testBordureGhost(&fantomes[i], _params->bordure);
 
         ///     3.5. Tester collision fantôme
-        for(i=0;i<4;i++)
+        for(i=0;i<NB_GHOSTS;i++)
             testPacmanGhost(&pacman,&fantomes[i]);
 
         ///     3.6. Tester collision diamant
-        for(i=0;i<5;i++)
+        for(i=0;i<_totalDiamants;i++)
         {
             if(testPacmanDiamant(&pacman,&diamants[i],plateau))
             {
@@ -1101,6 +1200,8 @@ int tableau3(Parametres _params, int _score[NB_TAB])
                 nbDiamants--;
         ///         3.6.4. Augmenter la vitesse du pacman
                 pacman.vitesse--;
+                if(pacman.vitesse <= 0)
+                    pacman.vitesse = 1;
             }
         }
 
@@ -1108,7 +1209,7 @@ int tableau3(Parametres _params, int _score[NB_TAB])
         testPacmanMur(&pacman,plateau);
 
         ///     3.8. Tester collision fantômes et murs
-        for(i=0;i<4;i++)
+        for(i=0;i<NB_GHOSTS;i++)
             testGhostMur(&fantomes[i],plateau);
 
         ///     3.9. Tester nombre de vie
@@ -1132,7 +1233,7 @@ int tableau3(Parametres _params, int _score[NB_TAB])
         }
 
         ///     3.8. Traquer Pacman
-        for(i=0;i<4;i++){
+        for(i=0;i<NB_GHOSTS;i++){
             deplacerGhost(&fantomes[i]);
         }
 
@@ -1186,21 +1287,21 @@ int tableau3(Parametres _params, int _score[NB_TAB])
 
         ///     3.12. Afficher éléments
         ///         3.12.1. Afficher diamants
-        for(i=0; i<5; i++)
+        for(i=0; i<_totalDiamants; i++)
         {
             plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
-            affiche(plateau, diamants[i].posX, diamants[i].posY, _params.bordure);
+            affiche(plateau, diamants[i].posX, diamants[i].posY, _params->bordure);
         }
 
         ///         3.12.2. Afficher Pacman
         plateau[pacman.posY][pacman.posX] = pacman.forme;
-        affiche(plateau, pacman.posX, pacman.posY, _params.bordure);
+        affiche(plateau, pacman.posX, pacman.posY, _params->bordure);
 
         ///         3.12.3. Afficher fantômes
-        for(i=0; i<4; i++)
+        for(i=0; i<NB_GHOSTS; i++)
         {
             plateau[fantomes[i].posY][fantomes[i].posX]=fantomes[i].forme;
-            affiche(plateau, fantomes[i].posX, fantomes[i].posY, _params.bordure);
+            affiche(plateau, fantomes[i].posX, fantomes[i].posY, _params->bordure);
         }
 
         ///         3.12.4. Afficher score
@@ -1214,11 +1315,12 @@ int tableau3(Parametres _params, int _score[NB_TAB])
         compteurBoucle++;
     }
 
+    free(diamants);
     Sleep(2000);
     return gagne;
 }
 
-int tableau4(Parametres _params, int _score[NB_TAB])
+int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 {
     char plateau[LIG][COL] = {"                                                  ",
                                 "                                                  ",
@@ -1242,15 +1344,15 @@ int tableau4(Parametres _params, int _score[NB_TAB])
                                 "                                                  "
                                };
     t_snake snake;
-    t_diamant diamants[5];
+    t_diamant *diamants;
     t_diamant yukunkun;
-    t_ghost ghosts[4];
+    t_ghost ghosts[NB_GHOSTS];
 
     int nbDiamants, i, fin, gagne, compteurBoucle, recommencer;
-    int vitesseFantomes[4];
+    int vitesseFantomes[NB_GHOSTS];
 
 ///1.	Initialiser tableau
-    nbDiamants = 5;
+    nbDiamants = _totalDiamants;
     fin = 0;
     gagne = 0;
     compteurBoucle = 0;
@@ -1261,11 +1363,18 @@ int tableau4(Parametres _params, int _score[NB_TAB])
     vitesseFantomes[2] = 1;
     vitesseFantomes[3] = 1;
 
+    diamants = (t_diamant*)malloc(_totalDiamants*sizeof(t_diamant));
+    if(!diamants)
+    {
+        printf("Erreur initialisation des diamants. Veuillez relancer le jeu.");
+        return 0;
+    }
+
 ///     1.1.	Initialiser snake
     initialiserSnake(&snake,6,plateau);
 
 ///     1.2.	Initialiser diamants
-    for(i=0;i<5;i++)
+    for(i=0;i<_totalDiamants;i++)
         initialiserDiamant(&diamants[i],plateau);
 
 ///     1.3.	Initialiser Yukunkun
@@ -1273,40 +1382,103 @@ int tableau4(Parametres _params, int _score[NB_TAB])
     yukunkun.forme = ' '; // Ne doit pas apparaître à l'initialisation
 
 ///     1.4.	Initialiser fantômes
-    for(i=0;i<4;i++)
+    for(i=0;i<NB_GHOSTS;i++)
         initialiserGhost(&ghosts[i],vitesseFantomes[i],plateau);
 
 ///     1.5.	Initialiser plateau
     plateau[snake.ancre->posY][snake.ancre->posX] = snake.ancre->forme;
 
-    for(i=0;i<5;i++)
+    for(i=0;i<_totalDiamants;i++)
         plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
 
-    for(i=0;i<4;i++)
+    for(i=0;i<NB_GHOSTS;i++)
         plateau[ghosts[i].posY][ghosts[i].posX] = ghosts[i].forme;
 
     plateau[yukunkun.posY][yukunkun.posX] = yukunkun.forme;
 
 ///2.	Afficher plateau
-    afficherPlateau(plateau,_params.bordure);
+    afficherPlateau(plateau,_params->bordure);
 
     gotoligcol(LIG+3,0);
     printf("Score : %d",_score[0]+_score[1]+_score[2]+_score[3]);
 
     gotoligcol(LIG+4,0);
     printf("Vies : %d",snake.vies);
+
+    printf("\nAppuyer sur q pour revenir au menu\n");
+    printf("Appuyer sur p pour mettre en pause");
+
 ///3.	Boucle de jeu
     while(!fin)
     {
 ///     3.1.	Si le tableau doit être recommencé
         if(recommencer)
         {
-///         3.1.1.	Initialiser tableau
-///         3.1.2.	Effacer écran
-///         3.1.3.	Afficher plateau
+            Sleep(2000);
+
+            int nbViesPrecedent;
+
+            nbViesPrecedent = snake.vies;
+
+///         3.1.1. Effacer éléments
+            for(i=0; i<_totalDiamants; i++)
+            {
+                plateau[diamants[i].posY][diamants[i].posX] = ' ';
+            }
+
+            plateau[yukunkun.posY][yukunkun.posX] = ' ';
+
+            for(i=0; i<NB_GHOSTS; i++)
+            {
+                plateau[ghosts[i].posY][ghosts[i].posX]=' ';
+            }
+
+            effacerSnake(&snake, plateau);
+
+///         3.1.2.	Initialiser tableau
+            nbDiamants = _totalDiamants;
+            fin = 0;
+            gagne = 0;
+            compteurBoucle = 0;
+            recommencer = 0;
+
+            supprimerSnake(&snake);
+            initialiserSnake(&snake,6,plateau);
+            snake.vies = nbViesPrecedent;
+
+            for(i=0;i<_totalDiamants;i++)
+                initialiserDiamant(&diamants[i],plateau);
+
+            initialiserDiamant(&yukunkun,plateau);
+            yukunkun.forme = ' '; // Ne doit pas apparaître à l'initialisation
+
+            for(i=0;i<NB_GHOSTS;i++)
+                initialiserGhost(&ghosts[i],vitesseFantomes[i],plateau);
+
+            plateau[snake.ancre->posY][snake.ancre->posX] = snake.ancre->forme;
+
+            for(i=0;i<_totalDiamants;i++)
+                plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
+
+            for(i=0;i<NB_GHOSTS;i++)
+                plateau[ghosts[i].posY][ghosts[i].posX] = ghosts[i].forme;
+
+            plateau[yukunkun.posY][yukunkun.posX] = yukunkun.forme;
+
+///         3.1.3.	Effacer écran
+            system("cls");
+
+///         3.1.4.	Afficher plateau
+            afficherPlateau(plateau,_params->bordure);
+
+            gotoligcol(LIG+3,0);
+            printf("Score : %d",_score[0]+_score[1]+_score[2]+_score[3]);
+
+            gotoligcol(LIG+4,0);
+            printf("Vies : %d",snake.vies);
         }
 
-        switch(_params.vitesseInitale)
+        switch(_params->vitesseInitale)
         {
         case 1:
             Sleep(200);
@@ -1322,15 +1494,15 @@ int tableau4(Parametres _params, int _score[NB_TAB])
         }
 
 ///     3.2.	Mise à jour fantômes selon la vitesse
-        for(i=0;i<4;i++){
+        for(i=0;i<NB_GHOSTS;i++){
             if(compteurBoucle%ghosts[i].vitesse == 0)
             {
-                updateGhost(&ghosts[i],plateau,_params.bordure);
+                updateGhost(&ghosts[i],plateau,_params->bordure);
             }
         }
 
 ///     3.3.	Mise à jour Snake
-        updateSnake(&snake,plateau,_params.bordure);
+        updateSnake(&snake,plateau,_params->bordure);
 
 ///     3.4.	Générer Yukunkun
 ///         3.4.1.	Si le Yukunkun n’est pas déjà apparu alors le Yukunkun a une probabilité de 1/10 d’apparaître à chaque boucle
@@ -1352,42 +1524,57 @@ int tableau4(Parametres _params, int _score[NB_TAB])
             yukunkun.forme = ' ';
         }
 
-///     3.5.	Tester collision bordure (Snake
-        testBordureSnake(&snake,_params.bordure);
-///         3.5.1.	Si bordure activé, décrémenter nombre de vie de 1 et recommencer tableau
-///         3.5.2.	Sinon, faire réapparaitre Snake de l'autre coté
+///     3.5.	Tester collision bordure (Snake)
+        if(testBordureSnake(&snake,_params->bordure) && _params->bordure)
+        {
+            recommencer = 1;
+        }
 
 ///     3.6.	Tester collision bordure (fantômes)
-        for(i=0;i<4;i++)
-            testBordureGhost(&ghosts[i],_params.bordure);
+        for(i=0;i<NB_GHOSTS;i++)
+            testBordureGhost(&ghosts[i],_params->bordure);
 
 ///     3.7.	Tester collision fantômes et tête du snake
-        for(i=0;i<4;i++)
-            testTeteSnakeGhost(&snake, &ghosts[i]);
+        for(i=0;i<NB_GHOSTS;i++)
+        {
+            if(testTeteSnakeGhost(&snake, &ghosts[i]))
+            {
 ///         3.7.1.	Décrémenter le nombre de vie de 1
+                snake.vies--;
 ///         3.7.2.	Redémarrer le tableau
+                recommencer = 1;
+            }
+        }
+
 
 ///     3.8.	Tester collision fantômes et corps du Snake
-        for(i=0;i<4;i++)
+        for(i=0;i<NB_GHOSTS;i++)
         {
             t_corps *queueAcouper, *pt;
             if(testCorpsSnakeGhost(&snake,&ghosts[i],&queueAcouper))
             {
-///         3.8.1.	Afficher la queue coupée par du vide
+///         3.8.2.	Afficher la queue coupée par du vide
                 pt = queueAcouper;
                 while(pt!=NULL)
                 {
                     plateau[pt->posY][pt->posX] = ' ';
-                    affiche(plateau, pt->posX, pt->posY, _params.bordure);
+                    affiche(plateau, pt->posX, pt->posY, _params->bordure);
                     pt = pt->suivant;
                 }
-///         3.8.2.	Couper le snake
+///         3.8.3.	Couper le snake
                 supprimer_queue(&snake,queueAcouper);
             }
         }
+///     3.9.	Tester collision tête et corps du Snake
+        if(testCorpsTeteSnake(&snake))
+        {
+///         3.9.2.	Diminuer le nombre de vie de 1 et recommencer
+            snake.vies--;
+            recommencer = 1;
+        }
 
 ///     3.9.	Tester collision diamants
-        for(i=0;i<5;i++)
+        for(i=0;i<_totalDiamants;i++)
         {
             if(testSnakeDiamant(&snake, &diamants[i], plateau))
             {
@@ -1417,7 +1604,7 @@ int tableau4(Parametres _params, int _score[NB_TAB])
         testSnakeMur(&snake,plateau);
 
 ///     3.12.	Tester collision fantômes et murs
-        for(i=0;i<4;i++)
+        for(i=0;i<NB_GHOSTS;i++)
             testGhostMur(&ghosts[i], plateau);
 
 ///     3.13. Tester nombre de vie
@@ -1441,7 +1628,7 @@ int tableau4(Parametres _params, int _score[NB_TAB])
         }
 
 ///     3.15. Traquer Pacman
-        for(i=0;i<4;i++){
+        for(i=0;i<NB_GHOSTS;i++){
             deplacerGhost(&ghosts[i]);
         }
 
@@ -1495,24 +1682,24 @@ int tableau4(Parametres _params, int _score[NB_TAB])
 
 ///     3.17. Afficher éléments
 ///         3.17.1. Afficher diamants
-        for(i=0; i<5; i++)
+        for(i=0; i<_totalDiamants; i++)
         {
             plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
-            affiche(plateau, diamants[i].posX, diamants[i].posY, _params.bordure);
+            affiche(plateau, diamants[i].posX, diamants[i].posY, _params->bordure);
         }
 
 ///         3.17.2. Afficher Yukunkun
         plateau[yukunkun.posY][yukunkun.posX] = yukunkun.forme;
-        affiche(plateau, yukunkun.posX, yukunkun.posY, _params.bordure);
+        affiche(plateau, yukunkun.posX, yukunkun.posY, _params->bordure);
 
 ///         3.17.3. Afficher Pacman
-        afficherSnake(&snake, plateau, _params.bordure);
+        afficherSnake(&snake, plateau, _params->bordure);
 
 ///         3.17.4. Afficher fantômes
-        for(i=0; i<4; i++)
+        for(i=0; i<NB_GHOSTS; i++)
         {
             plateau[ghosts[i].posY][ghosts[i].posX]=ghosts[i].forme;
-            affiche(plateau, ghosts[i].posX, ghosts[i].posY, _params.bordure);
+            affiche(plateau, ghosts[i].posX, ghosts[i].posY, _params->bordure);
         }
 
 ///         3.17.5. Afficher score
@@ -1525,6 +1712,9 @@ int tableau4(Parametres _params, int _score[NB_TAB])
 
         compteurBoucle++;
     }
+
+    supprimerSnake(&snake);
+    free(diamants);
 
     Sleep(2000);
     return gagne;

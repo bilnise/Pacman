@@ -33,13 +33,6 @@
 		</Compiler>
 		<Unit filename="Constantes.h" />
 		<Unit filename="Entite.h" />
-		<Unit filename="Jeu.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="Jeu.h" />
-		<Unit filename="Parametres.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="Parametres.h" />
 		<Unit filename="Tableaux.c">
 			<Option compilerVar="CC" />
