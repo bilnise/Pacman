@@ -46,7 +46,7 @@ int testSnakeYukunkun(t_snake *_snake, t_diamant *_yukunkun, char _plateau[LIG][
 int testSnakeMur(t_snake *_snake, char _plateau[LIG][COL]);
 
 void ajouter_queue(t_snake *_snake);
-void supprimer_queue(t_snake *_snake);
+void supprimer_queue(t_snake *_snake, t_corps *queueAcouper);
 
 
 #endif // TABLEAUX_H_INCLUDED

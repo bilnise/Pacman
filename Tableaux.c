@@ -575,7 +575,7 @@ void ajouter_queue(t_snake *_snake)
     }
 }
 
-void supprimer_queue(t_snake *_snake)
+void supprimer_queue(t_snake *_snake, t_corps *_queueAcouper)
 {
     t_corps *pt;
 
@@ -589,7 +589,7 @@ void supprimer_queue(t_snake *_snake)
         else
         {
             pt = _snake->ancre;
-            while(pt->suivant->suivant!=NULL)
+            while(pt->suivant!=_queueAcouper)
             {
                 pt = pt->suivant;
             }
@@ -1263,8 +1263,6 @@ int tableau4(Parametres _params, int _score[NB_TAB])
 
 ///     1.1.	Initialiser snake
     initialiserSnake(&snake,6,plateau);
-    ajouter_queue(&snake);
-    ajouter_queue(&snake);
 
 ///     1.2.	Initialiser diamants
     for(i=0;i<5;i++)
@@ -1384,7 +1382,7 @@ int tableau4(Parametres _params, int _score[NB_TAB])
                     pt = pt->suivant;
                 }
 ///         3.8.2.	Couper le snake
-                //supprimer_queue(&snake,queueAcouper);
+                supprimer_queue(&snake,queueAcouper);
             }
         }
 
