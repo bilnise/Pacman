@@ -128,13 +128,14 @@ void afficherScores(int _scores[NB_TAB], int _partie)
 
     system("cls");
     afficherTitre();
-    printf("Partie : %d            Scores :\n", _partie);
-    printf("\n");
+    printf("Partie : %d            Scores :\n\n", _partie);
 
     for(i=0; i<NB_TAB; i++)
     {
         printf("\t\t  Tableau %d : %d\n", i+1, _scores[i]);
     }
+
+    printf("\nAppuyer sur q pour revenir au menu\n");
 
     do
     {

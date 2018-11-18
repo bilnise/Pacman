@@ -6,6 +6,7 @@
 #include <conio.h>
 #include "windows.h"
 #include "time.h"
+#include "math.h"
 
 #include "Constantes.h"
 #include "Entite.h"
@@ -51,6 +52,9 @@ int testSnakeMur(t_snake *_snake, char _plateau[LIG][COL]);
 void ajouter_queue(t_snake *_snake);
 void supprimer_queue(t_snake *_snake, t_corps *queueAcouper);
 void supprimerSnake(t_snake *_snake);
+
+void deplacerGhostIA(t_ghost *_ghost, char _plateau[LIG][COL]); // Non fonctionnelle (Boucle sans fin)
+void genererSuccesseurs(t_noeud *_noeud, char _plateau[LIG][COL], t_noeud *successeurs[4]);
 
 
 #endif // TABLEAUX_H_INCLUDED

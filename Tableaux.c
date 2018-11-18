@@ -1,5 +1,300 @@
 #include "Tableaux.h"
 
+void genererSuccesseurs(t_noeud *_noeud,char _plateau[LIG][COL], t_noeud *successeurs[4])
+{
+    int i;
+
+    if(_noeud->x-1 < 0 && _noeud->y-1 < 0)
+    {
+        successeurs[0] = NULL;
+        successeurs[3] = NULL;
+
+        successeurs[1] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[1]->g_cost=0;
+        successeurs[1]->h_cost=0;
+        successeurs[1]->parent=NULL;
+        successeurs[1]->x = _noeud->x +1;
+        successeurs[1]->y = _noeud->y;
+
+        successeurs[2] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[2]->g_cost=0;
+        successeurs[2]->h_cost=0;
+        successeurs[2]->parent=NULL;
+        successeurs[2]->x = _noeud->x;
+        successeurs[2]->y = _noeud->y + 1;
+    }
+    else if(_noeud->x+1 >= COL && _noeud->y-1 < 0)
+    {
+        successeurs[0] = NULL;
+        successeurs[1] = NULL;
+
+        successeurs[3] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[3]->g_cost=0;
+        successeurs[3]->h_cost=0;
+        successeurs[3]->parent=NULL;
+        successeurs[3]->x = _noeud->x - 1;
+        successeurs[3]->y = _noeud->y;
+
+        successeurs[2] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[2]->g_cost=0;
+        successeurs[2]->h_cost=0;
+        successeurs[2]->parent=NULL;
+        successeurs[2]->x = _noeud->x;
+        successeurs[2]->y = _noeud->y + 1;
+    }
+    else if(_noeud->x+1 >= COL && _noeud->y+1 >= LIG)
+    {
+        successeurs[1] = NULL;
+        successeurs[2] = NULL;
+
+        successeurs[3] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[3]->g_cost=0;
+        successeurs[3]->h_cost=0;
+        successeurs[3]->parent=NULL;
+        successeurs[3]->x = _noeud->x - 1;
+        successeurs[3]->y = _noeud->y;
+
+        successeurs[0] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[0]->g_cost=0;
+        successeurs[0]->h_cost=0;
+        successeurs[0]->parent=NULL;
+        successeurs[0]->x = _noeud->x;
+        successeurs[0]->y = _noeud->y - 1;
+    }
+    else if(_noeud->x-1 < 0 && _noeud->y+1 >= LIG)
+    {
+        successeurs[3] = NULL;
+        successeurs[2] = NULL;
+
+        successeurs[0] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[0]->g_cost=0;
+        successeurs[0]->h_cost=0;
+        successeurs[0]->parent=NULL;
+        successeurs[0]->x = _noeud->x;
+        successeurs[0]->y = _noeud->y - 1;
+
+        successeurs[1] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[1]->g_cost=0;
+        successeurs[1]->h_cost=0;
+        successeurs[1]->parent=NULL;
+        successeurs[1]->x = _noeud->x + 1;
+        successeurs[1]->y = _noeud->y;
+    }
+    else if(_noeud->x-1 < 0)
+    {
+        successeurs[3] = NULL;
+
+        successeurs[1] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[1]->g_cost=0;
+        successeurs[1]->h_cost=0;
+        successeurs[1]->parent=NULL;
+        successeurs[1]->x = _noeud->x + 1;
+        successeurs[1]->y = _noeud->y;
+
+        successeurs[0] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[0]->g_cost=0;
+        successeurs[0]->h_cost=0;
+        successeurs[0]->parent=NULL;
+        successeurs[0]->x = _noeud->x;
+        successeurs[0]->y = _noeud->y - 1;
+
+        successeurs[2] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[2]->g_cost=0;
+        successeurs[2]->h_cost=0;
+        successeurs[2]->parent=NULL;
+        successeurs[2]->x = _noeud->x;
+        successeurs[2]->y = _noeud->y + 1;
+    }
+    else if(_noeud->y-1 < 0)
+    {
+        successeurs[0] = NULL;
+
+        successeurs[1] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[1]->g_cost=0;
+        successeurs[1]->h_cost=0;
+        successeurs[1]->parent=NULL;
+        successeurs[1]->x = _noeud->x + 1;
+        successeurs[1]->y = _noeud->y;
+
+        successeurs[3] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[3]->g_cost=0;
+        successeurs[3]->h_cost=0;
+        successeurs[3]->parent=NULL;
+        successeurs[3]->x = _noeud->x - 1;
+        successeurs[3]->y = _noeud->y;
+
+        successeurs[2] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[2]->g_cost=0;
+        successeurs[2]->h_cost=0;
+        successeurs[2]->parent=NULL;
+        successeurs[2]->x = _noeud->x;
+        successeurs[2]->y = _noeud->y + 1;
+    }
+    else if(_noeud->x+1 >= COL)
+    {
+        successeurs[1] = NULL;
+
+        successeurs[0] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[0]->g_cost=0;
+        successeurs[0]->h_cost=0;
+        successeurs[0]->parent=NULL;
+        successeurs[0]->x = _noeud->x;
+        successeurs[0]->y = _noeud->y - 1;
+
+        successeurs[3] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[3]->g_cost=0;
+        successeurs[3]->h_cost=0;
+        successeurs[3]->parent=NULL;
+        successeurs[3]->x = _noeud->x - 1;
+        successeurs[3]->y = _noeud->y;
+
+        successeurs[2] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[2]->g_cost=0;
+        successeurs[2]->h_cost=0;
+        successeurs[2]->parent=NULL;
+        successeurs[2]->x = _noeud->x;
+        successeurs[2]->y = _noeud->y + 1;
+    }
+    else if(_noeud->y+1 >= LIG)
+    {
+        successeurs[2] = NULL;
+
+        successeurs[1] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[1]->g_cost=0;
+        successeurs[1]->h_cost=0;
+        successeurs[1]->parent=NULL;
+        successeurs[1]->x = _noeud->x + 1;
+        successeurs[1]->y = _noeud->y;
+
+        successeurs[3] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[3]->g_cost=0;
+        successeurs[3]->h_cost=0;
+        successeurs[3]->parent=NULL;
+        successeurs[3]->x = _noeud->x - 1;
+        successeurs[3]->y = _noeud->y;
+
+        successeurs[0] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[0]->g_cost=0;
+        successeurs[0]->h_cost=0;
+        successeurs[0]->parent=NULL;
+        successeurs[0]->x = _noeud->x;
+        successeurs[0]->y = _noeud->y - 1;
+    }
+    else
+    {
+        successeurs[0] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[0]->g_cost=0;
+        successeurs[0]->h_cost=0;
+        successeurs[0]->parent=NULL;
+        successeurs[0]->x = _noeud->x;
+        successeurs[0]->y = _noeud->y - 1;
+
+        successeurs[1] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[1]->g_cost=0;
+        successeurs[1]->h_cost=0;
+        successeurs[1]->parent=NULL;
+        successeurs[1]->x = _noeud->x + 1;
+        successeurs[1]->y = _noeud->y;
+
+        successeurs[2] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[2]->g_cost=0;
+        successeurs[2]->h_cost=0;
+        successeurs[2]->parent=NULL;
+        successeurs[2]->x = _noeud->x;
+        successeurs[2]->y = _noeud->y + 1;
+
+        successeurs[3] = (t_noeud*)malloc(sizeof(t_noeud));
+        successeurs[3]->g_cost=0;
+        successeurs[3]->h_cost=0;
+        successeurs[3]->parent=NULL;
+        successeurs[3]->x = _noeud->x - 1;
+        successeurs[3]->y = _noeud->y;
+    }
+
+    for(i=0;i<4;i++)
+    {
+        if(successeurs[i] != NULL)
+        {
+            if(_plateau[successeurs[i]->y][successeurs[i]->x] == '\xDB')
+            {
+                free(successeurs[i]);
+                successeurs[i] = NULL;
+            }
+        }
+    }
+}
+
+void deplacerGhostIA(t_ghost *_ghost, char _plateau[LIG][COL])
+{
+    t_listeTriee open, close;
+    t_noeud debut, *actuel, fin, *successeurs[4];
+    t_noeud *pt;
+    int i;
+
+    open.ancre = NULL;
+    close.ancre = NULL;
+
+    debut.x = _ghost->posX;
+    debut.y = _ghost->posY;
+    debut.g_cost = 0;
+
+    fin.x = _ghost->cibleX;
+    fin.y = _ghost->cibleY;
+
+    debut.h_cost = sqrt((fin.x-debut.x)*(fin.x-debut.x)+(fin.y-debut.y)*(fin.y-debut.y));
+
+
+    insertion(&open, &debut);
+    while(open.ancre != NULL)
+    {
+        actuel = pop(&open);
+        if(actuel->x == fin.x && actuel->y == fin.y)
+            break;
+
+        genererSuccesseurs(actuel,_plateau, successeurs);
+
+        for(i=0; i<4; i++)
+        {
+            if(successeurs[i]==NULL)
+                continue;
+
+            if(chercherNoeud(&open, successeurs[i]))
+            {
+                if(successeurs[i]->g_cost <= actuel->g_cost + 1)
+                    continue;
+            }
+            else if(chercherNoeud(&close,successeurs[i]))
+            {
+
+                if(successeurs[i]->g_cost <= actuel->g_cost + 1)
+                    continue;
+
+                insertion(&open, successeurs[i]);
+                supprimer(&close, successeurs[i]);
+            }
+            else
+            {
+                insertion(&open,successeurs[i]);
+                successeurs[i]->h_cost = sqrt((successeurs[i]->x - fin.x)*(successeurs[i]->x - fin.x) + (successeurs[i]->y - fin.y)*(successeurs[i]->y - fin.y));
+            }
+
+            successeurs[i]->g_cost = actuel->g_cost + 1;
+            successeurs[i]->parent = actuel;
+        }
+
+        insertion(&close,actuel);
+    }
+
+    pt = &fin;
+    while(pt->parent != &debut)
+    {
+        pt=pt->parent;
+    }
+
+    _ghost->posX = pt->x;
+    _ghost->posY = pt->y;
+}
+
 
 void initialiserPacman(t_pacman *_pacman, int _vitesseInitiale, char _plateau[LIG][COL])
 {
@@ -24,8 +319,8 @@ void initialiserPacman(t_pacman *_pacman, int _vitesseInitiale, char _plateau[LI
     /// 1.1.2. Eviter les superpositions
     do
     {
-        _pacman->posX = rand()%COL;
-        _pacman->posY = rand()%LIG;
+        _pacman->posX = rand()%(COL-2); // Eviter d'apparaître à coté de la bordure pour ne pas perdre une vie bêtement
+        _pacman->posY = rand()%(LIG-2); // Eviter d'apparaître à coté de la bordure pour ne pas perdre une vie bêtement
     }
     while(_plateau[_pacman->posY][_pacman->posX] != ' ');
 }
@@ -94,8 +389,8 @@ void initialiserSnake(t_snake *_snake, int _vitesse, char _plateau[LIG][COL])
         /// 1.1.2. Eviter les superpositions
         do
         {
-            tete->posX = rand()%COL;
-            tete->posY = rand()%LIG;
+            tete->posX = rand()%COL-2;
+            tete->posY = rand()%LIG-2;
         }
         while(_plateau[tete->posY][tete->posX] != ' ');
     }
@@ -229,8 +524,8 @@ void updateSnake(t_snake *_snake, char _plateau[LIG][COL], int _bordure)
         dernier = dernier->precedent;
     }
 
-    dernier->posX = dernier->posX + dernier->dirX;
-    dernier->posY = dernier->posY + dernier->dirY;
+    _snake->ancre->posX = _snake->ancre->posX + _snake->ancre->dirX;
+    _snake->ancre->posY = _snake->ancre->posY + _snake->ancre->dirY;
 }
 
 void deplacerGhost(t_ghost *_ghost)
@@ -404,7 +699,7 @@ int testPacmanDiamant(t_pacman *_pacman, t_diamant *_diamant, char _plateau[LIG]
 int testPacmanMur(t_pacman *_pacman, char _plateau[LIG][COL])
 {
     if(_plateau[_pacman->posY][_pacman->posX] == '\xDB') //Si le pacman se trouve sur un █ alors
-                                                         //repositionner à la position précèdente et immobiliser le pacman
+        //repositionner à la position précèdente et immobiliser le pacman
     {
         _pacman->posX = _pacman->posX - _pacman->dirX;
         _pacman->posY = _pacman->posY - _pacman->dirY;
@@ -419,7 +714,7 @@ int testPacmanMur(t_pacman *_pacman, char _plateau[LIG][COL])
 int testGhostMur(t_ghost *_ghost, char _plateau[LIG][COL])
 {
     if(_plateau[_ghost->posY][_ghost->posX] == '\xDB') //Si le fantome se trouve sur un █ alors
-                                                       //repositionner à la position précèdente et immobiliser le pacman
+        //repositionner à la position précèdente et immobiliser le pacman
     {
         _ghost->posX = _ghost->posX - _ghost->dirX;
         _ghost->posY = _ghost->posY - _ghost->dirY;
@@ -571,7 +866,7 @@ int testSnakeYukunkun(t_snake *_snake, t_diamant *_yukunkun, char _plateau[LIG][
 int testSnakeMur(t_snake *_snake, char _plateau[LIG][COL])
 {
     if(_plateau[_snake->ancre->posY][_snake->ancre->posX] == '\xDB') //Si le snake se trouve sur un █ alors
-                                                                     //repositionner à la position précèdente et immobiliser le snake
+        //repositionner à la position précèdente et immobiliser le snake
     {
         _snake->ancre->posX = _snake->ancre->posX - _snake->ancre->dirX;
         _snake->ancre->posY = _snake->ancre->posY - _snake->ancre->dirY;
@@ -621,23 +916,15 @@ void supprimer_queue(t_snake *_snake, t_corps *_queueAcouper)
 {
     t_corps *pt;
 
-    if(_snake->ancre != NULL)
+    if(_snake->ancre != NULL && _snake->ancre->suivant != NULL)
     {
-        if(_snake->ancre->suivant == NULL)
+        pt = _snake->ancre;
+        while(pt->suivant!=_queueAcouper)
         {
-            free(_snake->ancre);
-            _snake->ancre = NULL;
+            pt = pt->suivant;
         }
-        else
-        {
-            pt = _snake->ancre;
-            while(pt->suivant!=_queueAcouper)
-            {
-                pt = pt->suivant;
-            }
-            free(pt->suivant);
-            pt->suivant = NULL;
-        }
+        free(pt->suivant);
+        pt->suivant = NULL;
     }
 }
 
@@ -764,13 +1051,13 @@ int tableau1(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
             fin = 1;
         }
         ///     3.3. Tester collision diamant
-        for(i=0;i<_totalDiamants;i++)
+        for(i=0; i<_totalDiamants; i++)
         {
             if(testPacmanDiamant(&pacman,&diamants[i],plateau))
             {
-        ///         3.3.1. Augmenter score de 10
+                ///         3.3.1. Augmenter score de 10
                 _score[0] += 10;
-        ///         3.3.2. Décrémenter nombre de diamants restants de 1
+                ///         3.3.2. Décrémenter nombre de diamants restants de 1
                 nbDiamants--;
             }
         }
@@ -876,11 +1163,11 @@ int tableau2(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
     initialiserPacman(&pacman,_params->vitesseInitale, plateau);
 
     ///     1.2. Initialiser les diamants
-    for(i=0; i<_totalDiamants;i++)
+    for(i=0; i<_totalDiamants; i++)
         initialiserDiamant(&diamants[i], plateau);
 
     ///     1.3. Initialiser fantômes
-    for(i=0;i<NB_GHOSTS;i++)
+    for(i=0; i<NB_GHOSTS; i++)
         initialiserGhost(&fantomes[i],_params->vitesseInitale, plateau);
 
     ///     1.4. Initialiser plateau
@@ -927,7 +1214,8 @@ int tableau2(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
         ///     3.1. Mise à jour fantômes
-        for(i=0;i<NB_GHOSTS;i++){
+        for(i=0; i<NB_GHOSTS; i++)
+        {
             updateGhost(&fantomes[i],plateau,_params->bordure);
         }
 
@@ -939,21 +1227,21 @@ int tableau2(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         testBordurePacman(&pacman,_params->bordure);
 
         ///     3.4. Tester collision bordure (fantômes)
-        for(i=0;i<NB_GHOSTS;i++)
+        for(i=0; i<NB_GHOSTS; i++)
             testBordureGhost(&fantomes[i], _params->bordure);
 
         ///     3.5. Tester collision fantôme
-        for(i=0;i<NB_GHOSTS;i++)
+        for(i=0; i<NB_GHOSTS; i++)
             testPacmanGhost(&pacman,&fantomes[i]);
 
         ///     3.6. Tester collision diamant
-        for(i=0;i<_totalDiamants;i++)
+        for(i=0; i<_totalDiamants; i++)
         {
             if(testPacmanDiamant(&pacman,&diamants[i],plateau))
             {
-        ///         3.3.1. Augmenter score de 10
+                ///         3.3.1. Augmenter score de 10
                 _score[1] += 10;
-        ///         3.3.2. Décrémenter nombre de diamants restants de 1
+                ///         3.3.2. Décrémenter nombre de diamants restants de 1
                 nbDiamants--;
             }
         }
@@ -979,7 +1267,8 @@ int tableau2(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
         ///     3.8. Modifier la direction des fantômes aléatoirement
-        for(i=0;i<NB_GHOSTS;i++){
+        for(i=0; i<NB_GHOSTS; i++)
+        {
             deplacerGhost(&fantomes[i]);
         }
 
@@ -1068,26 +1357,26 @@ int tableau3(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 {
     // design du plateau /xDB correspond à █
     char plateau[LIG][COL] = {"                                                  ",
-                                "                                                  ",
-                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
-                                "     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     ",
-                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
-                                "       \xDB                                  \xDB       ",
-                                "       \xDB                                  \xDB       ",
-                                "       \xDB                                  \xDB       ",
-                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
-                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
-                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
-                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
-                                "       \xDB                                  \xDB       ",
-                                "       \xDB                                  \xDB       ",
-                                "       \xDB                                  \xDB       ",
-                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
-                                "     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     ",
-                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
-                                "                                                  ",
-                                "                                                  "
-                               };
+                              "                                                  ",
+                              "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
+                              "     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     ",
+                              "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
+                              "       \xDB                                  \xDB       ",
+                              "       \xDB                                  \xDB       ",
+                              "       \xDB                                  \xDB       ",
+                              "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                              "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                              "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                              "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                              "       \xDB                                  \xDB       ",
+                              "       \xDB                                  \xDB       ",
+                              "       \xDB                                  \xDB       ",
+                              "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
+                              "     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     ",
+                              "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
+                              "                                                  ",
+                              "                                                  "
+                             };
     int nbDiamants, i, fin, gagne, compteurBoucle;
     int vitesseFantomes[NB_GHOSTS];
     t_diamant *diamants;
@@ -1116,11 +1405,11 @@ int tableau3(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
     initialiserPacman(&pacman,5, plateau);
 
     ///     1.2. Initialiser les diamants
-    for(i=0;i<_totalDiamants;i++)
+    for(i=0; i<_totalDiamants; i++)
         initialiserDiamant(&diamants[i], plateau);
 
     ///     1.3. Initialiser fantômes
-    for(i=0;i<NB_GHOSTS;i++)
+    for(i=0; i<NB_GHOSTS; i++)
         initialiserGhost(&fantomes[i],vitesseFantomes[i], plateau);
 
     ///     1.4. Initialiser plateau
@@ -1165,7 +1454,8 @@ int tableau3(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
         ///     3.1. Mise à jour Ghosts selon la vitesse des fantômes
-        for(i=0;i<NB_GHOSTS;i++){
+        for(i=0; i<NB_GHOSTS; i++)
+        {
             if(compteurBoucle%fantomes[i].vitesse == 0)
             {
                 updateGhost(&fantomes[i],plateau,_params->bordure);
@@ -1182,23 +1472,23 @@ int tableau3(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         testBordurePacman(&pacman,_params->bordure);
 
         ///     3.4. Tester collision bordure (fantômes)
-        for(i=0;i<NB_GHOSTS;i++)
+        for(i=0; i<NB_GHOSTS; i++)
             testBordureGhost(&fantomes[i], _params->bordure);
 
         ///     3.5. Tester collision fantôme
-        for(i=0;i<NB_GHOSTS;i++)
+        for(i=0; i<NB_GHOSTS; i++)
             testPacmanGhost(&pacman,&fantomes[i]);
 
         ///     3.6. Tester collision diamant
-        for(i=0;i<_totalDiamants;i++)
+        for(i=0; i<_totalDiamants; i++)
         {
             if(testPacmanDiamant(&pacman,&diamants[i],plateau))
             {
-        ///         3.3.1. Augmenter score de 10
+                ///         3.3.1. Augmenter score de 10
                 _score[2] += 10;
-        ///         3.3.2. Décrémenter nombre de diamants restants de 1
+                ///         3.3.2. Décrémenter nombre de diamants restants de 1
                 nbDiamants--;
-        ///         3.6.4. Augmenter la vitesse du pacman
+                ///         3.6.4. Augmenter la vitesse du pacman
                 pacman.vitesse--;
                 if(pacman.vitesse <= 0)
                     pacman.vitesse = 1;
@@ -1209,7 +1499,7 @@ int tableau3(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         testPacmanMur(&pacman,plateau);
 
         ///     3.8. Tester collision fantômes et murs
-        for(i=0;i<NB_GHOSTS;i++)
+        for(i=0; i<NB_GHOSTS; i++)
             testGhostMur(&fantomes[i],plateau);
 
         ///     3.9. Tester nombre de vie
@@ -1233,7 +1523,8 @@ int tableau3(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
         ///     3.8. Traquer Pacman
-        for(i=0;i<NB_GHOSTS;i++){
+        for(i=0; i<NB_GHOSTS; i++)
+        {
             deplacerGhost(&fantomes[i]);
         }
 
@@ -1323,26 +1614,26 @@ int tableau3(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 {
     char plateau[LIG][COL] = {"                                                  ",
-                                "                                                  ",
-                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
-                                "     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     ",
-                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
-                                "       \xDB                                  \xDB       ",
-                                "       \xDB                                  \xDB       ",
-                                "       \xDB                                  \xDB       ",
-                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
-                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
-                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
-                                "                      \xDB\xDB\xDB\xDB\xDB                       ",
-                                "       \xDB                                  \xDB       ",
-                                "       \xDB                                  \xDB       ",
-                                "       \xDB                                  \xDB       ",
-                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
-                                "     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     ",
-                                "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
-                                "                                                  ",
-                                "                                                  "
-                               };
+                              "                                                  ",
+                              "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
+                              "     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     ",
+                              "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
+                              "       \xDB                                  \xDB       ",
+                              "       \xDB                                  \xDB       ",
+                              "       \xDB                                  \xDB       ",
+                              "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                              "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                              "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                              "                      \xDB\xDB\xDB\xDB\xDB                       ",
+                              "       \xDB                                  \xDB       ",
+                              "       \xDB                                  \xDB       ",
+                              "       \xDB                                  \xDB       ",
+                              "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
+                              "     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     \xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB\xDB     ",
+                              "     \xDB\xDB\xDB\xDB\xDB                              \xDB\xDB\xDB\xDB\xDB     ",
+                              "                                                  ",
+                              "                                                  "
+                             };
     t_snake snake;
     t_diamant *diamants;
     t_diamant yukunkun;
@@ -1374,7 +1665,7 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
     initialiserSnake(&snake,6,plateau);
 
 ///     1.2.	Initialiser diamants
-    for(i=0;i<_totalDiamants;i++)
+    for(i=0; i<_totalDiamants; i++)
         initialiserDiamant(&diamants[i],plateau);
 
 ///     1.3.	Initialiser Yukunkun
@@ -1382,16 +1673,16 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
     yukunkun.forme = ' '; // Ne doit pas apparaître à l'initialisation
 
 ///     1.4.	Initialiser fantômes
-    for(i=0;i<NB_GHOSTS;i++)
+    for(i=0; i<NB_GHOSTS; i++)
         initialiserGhost(&ghosts[i],vitesseFantomes[i],plateau);
 
 ///     1.5.	Initialiser plateau
     plateau[snake.ancre->posY][snake.ancre->posX] = snake.ancre->forme;
 
-    for(i=0;i<_totalDiamants;i++)
+    for(i=0; i<_totalDiamants; i++)
         plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
 
-    for(i=0;i<NB_GHOSTS;i++)
+    for(i=0; i<NB_GHOSTS; i++)
         plateau[ghosts[i].posY][ghosts[i].posX] = ghosts[i].forme;
 
     plateau[yukunkun.posY][yukunkun.posX] = yukunkun.forme;
@@ -1436,7 +1727,6 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
             effacerSnake(&snake, plateau);
 
 ///         3.1.2.	Initialiser tableau
-            nbDiamants = _totalDiamants;
             fin = 0;
             gagne = 0;
             compteurBoucle = 0;
@@ -1446,21 +1736,24 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
             initialiserSnake(&snake,6,plateau);
             snake.vies = nbViesPrecedent;
 
-            for(i=0;i<_totalDiamants;i++)
+            for(i=0; i<_totalDiamants; i++)
                 initialiserDiamant(&diamants[i],plateau);
 
             initialiserDiamant(&yukunkun,plateau);
             yukunkun.forme = ' '; // Ne doit pas apparaître à l'initialisation
 
-            for(i=0;i<NB_GHOSTS;i++)
+            for(i=0; i<NB_GHOSTS; i++)
                 initialiserGhost(&ghosts[i],vitesseFantomes[i],plateau);
 
             plateau[snake.ancre->posY][snake.ancre->posX] = snake.ancre->forme;
 
-            for(i=0;i<_totalDiamants;i++)
+            for(i=0; i<_totalDiamants-nbDiamants; i++)
+                diamants[i].forme = ' '; // Effacer les diamants déjà mangés avant de recommencer
+
+            for(i=0; i<_totalDiamants; i++)
                 plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
 
-            for(i=0;i<NB_GHOSTS;i++)
+            for(i=0; i<NB_GHOSTS; i++)
                 plateau[ghosts[i].posY][ghosts[i].posX] = ghosts[i].forme;
 
             plateau[yukunkun.posY][yukunkun.posX] = yukunkun.forme;
@@ -1476,6 +1769,9 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 
             gotoligcol(LIG+4,0);
             printf("Vies : %d",snake.vies);
+
+            printf("\nAppuyer sur q pour revenir au menu\n");
+            printf("Appuyer sur p pour mettre en pause");
         }
 
         switch(_params->vitesseInitale)
@@ -1494,7 +1790,8 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
 ///     3.2.	Mise à jour fantômes selon la vitesse
-        for(i=0;i<NB_GHOSTS;i++){
+        for(i=0; i<NB_GHOSTS; i++)
+        {
             if(compteurBoucle%ghosts[i].vitesse == 0)
             {
                 updateGhost(&ghosts[i],plateau,_params->bordure);
@@ -1515,7 +1812,8 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
             {
                 yukunkun.posX = rand()%COL;
                 yukunkun.posY = rand()%LIG;
-            }while(plateau[yukunkun.posY][yukunkun.posX] != ' ');
+            }
+            while(plateau[yukunkun.posY][yukunkun.posX] != ' ');
         }
 ///         3.4.2.	Sinon le Yukunkun a une probabilité de 1/10 de disparaître
         else if(plateau[yukunkun.posY][yukunkun.posX] == '*' && (rand()%50 == 1))
@@ -1531,11 +1829,11 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
 ///     3.6.	Tester collision bordure (fantômes)
-        for(i=0;i<NB_GHOSTS;i++)
+        for(i=0; i<NB_GHOSTS; i++)
             testBordureGhost(&ghosts[i],_params->bordure);
 
 ///     3.7.	Tester collision fantômes et tête du snake
-        for(i=0;i<NB_GHOSTS;i++)
+        for(i=0; i<NB_GHOSTS; i++)
         {
             if(testTeteSnakeGhost(&snake, &ghosts[i]))
             {
@@ -1548,7 +1846,7 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 
 
 ///     3.8.	Tester collision fantômes et corps du Snake
-        for(i=0;i<NB_GHOSTS;i++)
+        for(i=0; i<NB_GHOSTS; i++)
         {
             t_corps *queueAcouper, *pt;
             if(testCorpsSnakeGhost(&snake,&ghosts[i],&queueAcouper))
@@ -1574,7 +1872,7 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
 ///     3.9.	Tester collision diamants
-        for(i=0;i<_totalDiamants;i++)
+        for(i=0; i<_totalDiamants; i++)
         {
             if(testSnakeDiamant(&snake, &diamants[i], plateau))
             {
@@ -1594,22 +1892,29 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 ///         3.10.1.	Augmenter score de 5
             _score[3] += 5;
 ///         3.10.3.	Allonger le snake en queue de 5
-            for(i=0;i<5;i++)
+            for(i=0; i<5; i++)
                 ajouter_queue(&snake);
 ///         3.10.4.	Incrémenter le nombre de vie de 1
             snake.vies++;
         }
 
 ///     3.11.	Tester collision Snake et murs
-        testSnakeMur(&snake,plateau);
+        if(testSnakeMur(&snake,plateau))
+        {
+            if(snake.ancre->suivant != NULL)
+            {
+                snake.ancre->suivant->posX = snake.ancre->posX - snake.ancre->dirX;
+                snake.ancre->suivant->posY = snake.ancre->posY - snake.ancre->dirY;
+            }
+        }
 
 ///     3.12.	Tester collision fantômes et murs
-        for(i=0;i<NB_GHOSTS;i++)
+        for(i=0; i<NB_GHOSTS; i++)
             testGhostMur(&ghosts[i], plateau);
 
 ///     3.13. Tester nombre de vie
 ///         3.13.1. Si nombre de vie nul, afficher "Game over" et retourner 0
-        if(snake.vies == 0)
+        if(snake.vies <= 0)
         {
             gotoligcol(LIG/2, COL/2-5);
             printf("GAME OVER");
@@ -1628,7 +1933,8 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
 ///     3.15. Traquer Pacman
-        for(i=0;i<NB_GHOSTS;i++){
+        for(i=0; i<NB_GHOSTS; i++)
+        {
             deplacerGhost(&ghosts[i]);
         }
 
