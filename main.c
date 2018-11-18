@@ -177,10 +177,12 @@ void menu(Parametres *_params, int _scores[NB_TAB], int *_tableauCourant, int *_
 
     while(1)
     {
+        color(15,0);
         system("cls");
         system("mode con lines=18 cols=50");
         ///3.1 Afficher les choix possibles
         afficherTitre();
+        printf("\n");
         printf("                1. Regles du jeu\n");
         printf("                2. Regler vitesse initiale\n");
         printf("                3. Activer/Desactiver bordure\n");
@@ -331,12 +333,13 @@ int main()
     srand(time(NULL));
 
     system("mode con lines=18 cols=50");
+    color(15,0);
     /// 1. Afficher crédits
     credits();
     Sleep(2000);
 
     /// 2. Initialiser paramètres par défaut
-    params.vitesseInitale = 1;
+    params.vitesseInitale = 2;
     params.bordure = 1;
 
     /// 3. Initialiser scores et tableau courant

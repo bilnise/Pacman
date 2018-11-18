@@ -19,6 +19,10 @@ void affiche(char _plateau[LIG][COL], int _x, int _y, int _bordure)
 
     printf("%c", _plateau[_y][_x]);
 }
+void color(int t, int f)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),f*16+t);
+}
 
 void insertion(t_listeTriee *_liste, t_noeud *_nv)
 {

@@ -1110,15 +1110,19 @@ int tableau1(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
         ///     3.7. Afficher éléments
         ///         3.7.1. Afficher diamants
+        color(11,0);
         for(i=0; i<_totalDiamants; i++)
         {
             plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
             affiche(plateau, diamants[i].posX, diamants[i].posY, _params->bordure);
         }
         ///         3.7.2. Afficher Pacman
+        color(2,0);
         plateau[pacman.posY][pacman.posX] = pacman.forme;
         affiche(plateau, pacman.posX, pacman.posY, _params->bordure);
+
         ///         3.7.3. Afficher score
+        color(15,0);
         gotoligcol(LIG+3,8);
         printf("%d",_score[0]);
         ///         3.7.4. Afficher vies
@@ -1322,6 +1326,7 @@ int tableau2(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 
         ///     3.10. Afficher éléments
         ///         3.10.1. Afficher diamants
+        color(11,0);
         for(i=0; i<_totalDiamants; i++)
         {
             plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
@@ -1329,10 +1334,12 @@ int tableau2(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
         ///         3.10.2. Afficher Pacman
+        color(2,0);
         plateau[pacman.posY][pacman.posX] = pacman.forme;
         affiche(plateau, pacman.posX, pacman.posY, _params->bordure);
 
         ///         3.10.3. Afficher fantômes
+        color(12,0);
         for(i=0; i<NB_GHOSTS; i++)
         {
             plateau[fantomes[i].posY][fantomes[i].posX]=fantomes[i].forme;
@@ -1340,6 +1347,7 @@ int tableau2(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
         ///         3.10.4. Afficher score
+        color(15,0);
         gotoligcol(LIG+3,8);
         printf("%d",_score[0]+_score[1]);
 
@@ -1578,6 +1586,7 @@ int tableau3(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 
         ///     3.12. Afficher éléments
         ///         3.12.1. Afficher diamants
+        color(11,0);
         for(i=0; i<_totalDiamants; i++)
         {
             plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
@@ -1585,10 +1594,12 @@ int tableau3(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
         ///         3.12.2. Afficher Pacman
+        color(2,0);
         plateau[pacman.posY][pacman.posX] = pacman.forme;
         affiche(plateau, pacman.posX, pacman.posY, _params->bordure);
 
         ///         3.12.3. Afficher fantômes
+        color(12,0);
         for(i=0; i<NB_GHOSTS; i++)
         {
             plateau[fantomes[i].posY][fantomes[i].posX]=fantomes[i].forme;
@@ -1596,6 +1607,7 @@ int tableau3(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
         ///         3.12.4. Afficher score
+        color(15,0);
         gotoligcol(LIG+3,8);
         printf("%d",_score[0]+_score[1]+_score[2]);
 
@@ -1988,6 +2000,7 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
 
 ///     3.17. Afficher éléments
 ///         3.17.1. Afficher diamants
+        color(11,0);
         for(i=0; i<_totalDiamants; i++)
         {
             plateau[diamants[i].posY][diamants[i].posX] = diamants[i].forme;
@@ -1995,13 +2008,16 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
 ///         3.17.2. Afficher Yukunkun
+        color(14,0);
         plateau[yukunkun.posY][yukunkun.posX] = yukunkun.forme;
         affiche(plateau, yukunkun.posX, yukunkun.posY, _params->bordure);
 
-///         3.17.3. Afficher Pacman
+///         3.17.3. Afficher Snake
+        color(2,0);
         afficherSnake(&snake, plateau, _params->bordure);
 
 ///         3.17.4. Afficher fantômes
+        color(12,0);
         for(i=0; i<NB_GHOSTS; i++)
         {
             plateau[ghosts[i].posY][ghosts[i].posX]=ghosts[i].forme;
@@ -2009,6 +2025,7 @@ int tableau4(Parametres *_params, int _score[NB_TAB], int _totalDiamants)
         }
 
 ///         3.17.5. Afficher score
+        color(15,0);
         gotoligcol(LIG+3,8);
         printf("%d",_score[0]+_score[1]+_score[2]+_score[3]);
 

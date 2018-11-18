@@ -39,6 +39,7 @@ void supprimer(t_listeTriee *_liste, t_noeud *_noeud);
 // Pour l'affichage
 void gotoligcol(int lig, int col);
 void affiche(char _plateau[LIG][COL], int _x, int _y, int _bordure);
+void color(int t,int f);
 
 
 #endif // UTILS_H_INCLUDED
